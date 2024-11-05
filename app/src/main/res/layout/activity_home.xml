@@ -67,7 +67,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="wrap_content"
-            android:text="$9400"
+            android:text="$9300"
             style="@style/balanceTextStyle"
             android:layout_height="wrap_content" />
     </androidx.constraintlayout.widget.ConstraintLayout>
