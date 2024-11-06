@@ -36,6 +36,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    dataBinding {
+        enable = true
+    }
 }
 
 dependencies {
@@ -55,5 +58,11 @@ dependencies {
     //ssp-sdp
     implementation(libs.ssp.android)
     implementation (libs.sdp.android)
+    // For Card view
+    implementation ("androidx.cardview:cardview:1.0.0")
+
+    // Chart and graph library
+    implementation ("com.github.blackfizz:eazegraph:1.2.2@aar")
+    implementation ("com.nineoldandroids:library:2.4.0")
 
 }
