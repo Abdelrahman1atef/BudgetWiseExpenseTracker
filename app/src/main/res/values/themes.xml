@@ -36,4 +36,27 @@
         <item name="android:textSize">@dimen/_15sdp</item>
         <item name="fontFamily">@font/arial_mdm</item>
     </style>
+    <style name="seeMoreStyle">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:background">@drawable/see_more_bg</item>
+        <item name="fontFamily">@font/arial_mdm</item>
+        <item name="textAllCaps">false</item>
+    </style>
+    <style name="catTitleTextStyle">
+        <item name="android:textColor">#292B2D</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="fontFamily">@font/arial_mdm</item>
+    </style>
+    <style name="catMoneyUsedTS">
+        <item name="android:textColor">#FD3C4A</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="fontFamily">@font/arial_mdm</item>
+    </style>
+    <style name="catSubtitleTextStyle">
+        <item name="android:textColor">#91919F</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+        <item name="fontFamily">@font/arial_mdm</item>
+    </style>
+
 </resources>

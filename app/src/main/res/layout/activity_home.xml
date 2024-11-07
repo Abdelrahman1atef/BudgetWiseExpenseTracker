@@ -185,10 +185,12 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="-90dp"
         app:layout_constraintTop_toBottomOf="@id/balanceLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/coordinatorLayout"
         >
         <include
             android:id="@+id/fragment_monthly_spending_summary"
@@ -200,7 +202,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.bottomappbar.BottomAppBar
@@ -217,7 +220,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="15dp"
-                android:background="@color/white"
                 android:outlineAmbientShadowColor="@color/trans"
                 android:outlineSpotShadowColor="@color/trans"
                 android:translationZ="0dp"
@@ -234,6 +236,7 @@
             style="@style/Widget.Design.FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/add"

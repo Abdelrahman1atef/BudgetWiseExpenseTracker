@@ -10,17 +10,8 @@
     <color name="natural3">#C8C8D3</color>
     <color name="sec_green">#00A86B</color>
 
-
-    <color name="colorPrimary">#024265</color>
-    <color name="colorPrimaryDark">#024265</color>
-    <color name="colorAccent">#05af9b</color>
-
-    <color name="color_one">#fb7268</color>
-    <color name="color_white">#ededf2</color>
-    <color name="color_two">#E3E0E0</color>
-
-    <color name="R">#FFA726</color>
-    <color name="Python">#66BB6A</color>
-    <color name="CPP">#EF5350</color>
-    <color name="Java">#29B6F6</color>
+    <color name="Shopping">#FCAC12</color>
+    <color name="Subscription">#7F3DFF</color>
+    <color name="Food">#FD3C4A</color>
+    <color name="Other">#0276AD</color>
 </resources>

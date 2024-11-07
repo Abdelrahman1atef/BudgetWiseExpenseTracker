@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="eiTitleTextStyleEI">
+        <item name="fontFamily">@font/arial_mdm</item>
+        <item name="android:textSize">@dimen/_18ssp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="eiSubtitleTextStyleEI">
+        <item name="fontFamily">@font/arial_mdm</item>
+        <item name="android:textSize">
+            @dimen/_14ssp
+        </item>
+        <item name="android:textColor">#A3FCFCFC</item>
+    </style>
+    <style name="eiInputAmountETEI">
+        <item name="fontFamily">@font/arial_bold</item>
+        <item name="android:textSize">
+            @dimen/_50ssp
+        </item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+</resources>

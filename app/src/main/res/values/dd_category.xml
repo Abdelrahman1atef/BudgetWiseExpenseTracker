@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ddCategories">dropDownMenuExample</string>
+    <string-array name="Categories">
+        <item>Category</item>
+        <item>Shopping</item>
+        <item>Food</item>
+        <item>Subscription</item>
+        <item>Other</item>
+    </string-array>
+</resources>

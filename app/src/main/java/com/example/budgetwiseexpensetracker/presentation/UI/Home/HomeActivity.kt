@@ -2,13 +2,15 @@ package com.example.budgetwiseexpensetracker.presentation.UI.Home
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.ui.AppBarConfiguration
 import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.databinding.ActivityHomeBinding
+import android.view.WindowManager
+import android.widget.TextView
+import com.example.budgetwiseexpensetracker.presentation.UI.Expense.ExpenseActivity
 import org.eazegraph.lib.models.PieModel
 
 
@@ -39,13 +41,12 @@ class HomeActivity : AppCompatActivity() {
     }
     private var clicked = false
 
-    private val tvR: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvR }
-    private val tvPython: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvPython }
-    private val tvCPP: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvCPP }
-    private val tvJava: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvJava }
+    private val tvShopping: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvShoppingMoneyUsed }
+    private val tvSubscription: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvSubscriptionMoneyUsed }
+    private val tvFood: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvFoodMoneyUsed }
+    private val tvOther: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvOtherMoneyUsed }
     private val pieChart: org.eazegraph.lib.charts.PieChart by lazy { binding.fragmentMonthlySpendingSummary.piechart }
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,40 +67,38 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun pieChart() {
-        tvR.text = 100.toString()
-        tvPython.text = 50.toString()
-        tvCPP.text = 70.toString()
-        tvJava.text = 20.toString()
-
-
-
 
         pieChart.addPieSlice(
             PieModel(
-                "R",
-                tvR.getText().toString().toInt().toFloat(),
-                Color.parseColor("#FFA726")
+                "Shopping",
+                tvShopping.getText().toString().replace("- $","",).toInt().toFloat(),
+                Color.parseColor("#FCAC12")
+//                Color.parseColor("#"+Integer.toHexString(getResources().getColor(R.color.Shopping)).replace("ff",""))
+
             )
         )
         pieChart.addPieSlice(
             PieModel(
-                "Python",
-                tvPython.text.toString().toInt().toFloat(),
-                Color.parseColor("#66BB6A")
+                "Subscription",
+                tvSubscription.text.toString().replace("- $","").toInt().toFloat(),
+                Color.parseColor("#7F3DFF")
+//                Color.parseColor("#"+Integer.toHexString(getResources().getColor(R.color.Subscription)).replace("ff",""))
             )
         )
         pieChart.addPieSlice(
             PieModel(
-                "C++",
-                tvCPP.text.toString().toInt().toFloat(),
-                Color.parseColor("#EF5350")
+                "Food",
+                tvFood.text.toString().replace("- $","").toInt().toFloat(),
+                Color.parseColor("#FD3C4A")
+//                Color.parseColor("#"+Integer.toHexString(getResources().getColor(R.color.Food)).replace("ff",""))
             )
         )
         pieChart.addPieSlice(
             PieModel(
-                "Java",
-                tvJava.text.toString().toInt().toFloat(),
-                Color.parseColor("#29B6F6")
+                "Other",
+                tvOther.text.toString().replace("- $","").toInt().toFloat(),
+                Color.parseColor("#0276AD")
+//                Color.parseColor("#"+Integer.toHexString(getResources().getColor(R.color.Other)).replace("ff",""))
             )
         )
 
@@ -113,7 +112,19 @@ class HomeActivity : AppCompatActivity() {
         binding.fabMainPage.setOnClickListener {
             setVisibility(clicked)
             setAnimation(clicked)
+//            window.setFlags(
+//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//            )
             clicked = !clicked
+        }
+        binding.addExpense.setOnClickListener {
+            intent = android.content.Intent(this, ExpenseActivity::class.java)
+            startActivity(intent)
+        }
+        binding.addIncome.setOnClickListener {
+            intent = android.content.Intent(this, ExpenseActivity::class.java)
+            startActivity(intent)
         }
     }
 
