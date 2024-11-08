@@ -9,409 +9,61 @@
     android:orientation="vertical"
     tools:context=".presentation.UI.MonthlySpendingSummary.MonthlySpendingSummaryFragment">
 
-    <RelativeLayout
-        android:id="@+id/SpendFrequencyLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvSpendFrequency"
-            style="@style/titleTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_12sdp"
-            android:text="Spend Frequency" />
-        <!--Pie chart to display the data-->
-        <org.eazegraph.lib.charts.PieChart
-            android:id="@+id/piechart"
-            android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/tvSpendFrequency"
+        style="@style/titleTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:text="Spend Frequency"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!--Pie chart to display the data-->
+    <org.eazegraph.lib.charts.PieChart
+        android:id="@+id/piechart"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_170sdp"
+        android:layout_below="@+id/tvSpendFrequency"
+        android:layout_marginTop="@dimen/_16sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSpendFrequency" />
 
-            android:layout_height="@dimen/_170sdp"
-            android:layout_below="@+id/tvSpendFrequency"
-            android:layout_marginTop="@dimen/_16sdp" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/textView"
+        style="@style/titleTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:text="Recent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/piechart" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/appCompatButton"
+        style="@style/seeMoreStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:minHeight="@dimen/_23sdp"
+        android:text="See All"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/piechart" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecentSpending"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_12sdp"
-        app:layout_constraintTop_toBottomOf="@id/SpendFrequencyLayout">
+        android:layout_marginTop="@dimen/_13sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatButton"
+        tools:listitem="@layout/monthly_spending_item" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/tcRecent"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                style="@style/titleTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Recent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <androidx.appcompat.widget.AppCompatButton
-                style="@style/seeMoreStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_23sdp"
-                android:text="See All"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tcRecent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/tcRecent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_16sdp">
-
-                    <ImageView
-                        android:id="@+id/shoppingIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/shopping"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginHorizontal="@dimen/_5sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/shoppingIcon"
-                        app:layout_constraintTop_toTopOf="parent">
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_6sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <TextView
-                                style="@style/catTitleTextStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Shopping"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                style="@style/catSubtitleTextStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:lines="1"
-                                android:text="Buy some grocery"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_6sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-
-                            <TextView
-                                android:id="@+id/tvShoppingMoneyUsed"
-                                style="@style/catMoneyUsedTS"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="- $120"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                style="@style/catSubtitleTextStyle"
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="10:00 AM"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_16sdp">
-
-                    <ImageView
-                        android:id="@+id/subscriptionIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/subscription"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginHorizontal="@dimen/_5sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/subscriptionIcon"
-                        app:layout_constraintTop_toTopOf="parent">
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_6sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <TextView
-                                style="@style/catTitleTextStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Subscription"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                style="@style/catSubtitleTextStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:lines="1"
-                                android:text="Disney+ Annual.."
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_6sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-
-                            <TextView
-                                android:id="@+id/tvSubscriptionMoneyUsed"
-
-                                style="@style/catMoneyUsedTS"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="- $80"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                style="@style/catSubtitleTextStyle"
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="03:30 PM"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_16sdp">
-
-                    <ImageView
-                        android:id="@+id/foodIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/food"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginHorizontal="@dimen/_5sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/foodIcon"
-                        app:layout_constraintTop_toTopOf="parent">
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_6sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <TextView
-                                style="@style/catTitleTextStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Food"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                style="@style/catSubtitleTextStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:lines="1"
-                                android:text="Buy a ramen"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_6sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-
-                            <TextView
-                                android:id="@+id/tvFoodMoneyUsed"
-
-                                style="@style/catMoneyUsedTS"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="- $32"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                style="@style/catSubtitleTextStyle"
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="07:30 PM"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_16sdp">
-
-                    <ImageView
-                        android:id="@+id/otherIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/other"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginHorizontal="@dimen/_5sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/otherIcon"
-                        app:layout_constraintTop_toTopOf="parent">
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_6sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <TextView
-                                style="@style/catTitleTextStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Other"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                style="@style/catSubtitleTextStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:lines="1"
-                                android:text="..."
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_6sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-
-                            <TextView
-                                android:id="@+id/tvOtherMoneyUsed"
-
-                                style="@style/catMoneyUsedTS"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="- $32"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                style="@style/catSubtitleTextStyle"
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="07:30 PM"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
