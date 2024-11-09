@@ -28,9 +28,9 @@ class HomeViewModel : ViewModel() {
             if (item.title == position) item.copy(amount = "- $"+newAmount, currentTime = newTime) else item
 
         }?.toMutableList()
-
+        Log.e("TAG", "updateSpendingData: ${spendingData.value}")
         Log.e("TAG", "updateSpendingData: ${position+" "+newAmount+" "+newTime}")
-        Log.e("TAG", "updateSpendingData: ${_spendingData.value}")
+        Log.e("TAG", "_updateSpendingData: ${_spendingData.value}")
 
 
     }
@@ -42,7 +42,7 @@ class HomeViewModel : ViewModel() {
             Model("Food", "Pizza", R.drawable.food, "- $0", "~", R.color.Food),
             Model("Other", "Salary", R.drawable.other, "- $0", "~", R.color.Other)
         )
-        Log.e("init", "updateFromINit: ")
+        Log.e("init", "updateFromInit: ")
 
     }
 }

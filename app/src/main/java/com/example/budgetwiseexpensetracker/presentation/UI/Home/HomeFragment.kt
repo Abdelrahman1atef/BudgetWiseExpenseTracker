@@ -48,10 +48,10 @@ class HomeFragment : Fragment() {
         )
     }
     private var clicked = false
-    private val pieChart: org.eazegraph.lib.charts.PieChart by lazy { binding.fragmentMonthlySpendingSummary.piechart }
     private lateinit var binding: FragmentHomeBinding
-    private val rvRecentSpending:RecyclerView by lazy{binding.fragmentMonthlySpendingSummary.rvRecentSpending}
-//    private lateinit var viewModel:HomeViewModel
+    private lateinit var homeRecyclerAdapter: HomeRecyclerAdapter
+
+//        private lateinit var viewModel:HomeViewModel
     private val sharedViewModel: HomeViewModel by activityViewModels() //Fragment
 
     override fun onCreateView(
@@ -90,28 +90,30 @@ class HomeFragment : Fragment() {
 //        sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
         // Update RecyclerView
-        (rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(sharedViewModel.list)
+        (binding.fragmentMonthlySpendingSummary.rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(sharedViewModel.list)
         // Update Pie Chart
         updatePieChart(sharedViewModel.list)
+        Log.e("FTAG", "1serObserver: HHHHHHHHHHHHHHHHHHHHH")
+        Log.e("FTAG", "1serObserver: ${sharedViewModel.list}")
+
     }
 
     private fun serObserver() {
-        Log.e("FTAG", "serObserver: HHHHHHHHHHHHHHHHHHHHH")
+        Log.e("FTAG", "2serObserver: HHHHHHHHHHHHHHHHHHHHH")
 
-        sharedViewModel._spendingData.observe(viewLifecycleOwner) { spendingData ->
+        sharedViewModel.spendingData.observe(viewLifecycleOwner) { spendingData ->
+            Log.e("FTAG", "2serObserver: $spendingData")
             // Update RecyclerView
-            (rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(spendingData)
+            (binding.fragmentMonthlySpendingSummary.rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(spendingData)
             // Update Pie Chart
             updatePieChart(spendingData)
-
-
         }
     }
     private fun updatePieChart(spendingData: MutableList<Model>?) {
-        pieChart.clearChart()  // Clear previous data to prevent overlap
+        binding.fragmentMonthlySpendingSummary.piechart.clearChart()  // Clear previous data to prevent overlap
         if (spendingData != null) {
             spendingData.forEach { item ->
-                pieChart.addPieSlice(
+                binding.fragmentMonthlySpendingSummary.piechart.addPieSlice(
                     item.amount?.let {
                         PieModel(
                             item.title,  // Title from the spending data
@@ -122,14 +124,15 @@ class HomeFragment : Fragment() {
                 )
             }
         }
-        pieChart.startAnimation()  // Start animation
+        binding.fragmentMonthlySpendingSummary.piechart.startAnimation()  // Start animation
     }
 
     private fun setAdapter(){
-        Log.e("TAG", "setAdapter: ", )
-        rvRecentSpending.apply {
+        homeRecyclerAdapter=HomeRecyclerAdapter()
+        binding.fragmentMonthlySpendingSummary.rvRecentSpending.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = HomeRecyclerAdapter()
+            adapter = homeRecyclerAdapter
+            homeRecyclerAdapter.setData(sharedViewModel.list)
         }
     }
 
@@ -150,9 +153,9 @@ class HomeFragment : Fragment() {
             clicked = !clicked
         }
         binding.addExpense.setOnClickListener {
-//            findNavController().navigate(R.id.action_homeFragment_to_expenseFragment)
-            val intent = Intent(requireContext(), ExpenseActivity::class.java)
-            startActivity(intent)
+            findNavController().navigate(R.id.action_homeFragment_to_expenseFragment)
+//            val intent = Intent(requireContext(), ExpenseActivity::class.java)
+//            startActivity(intent)
             setVisibility(clicked)
             setAnimation(clicked)
             clicked = !clicked

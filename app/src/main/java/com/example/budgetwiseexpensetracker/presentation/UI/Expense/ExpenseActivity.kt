@@ -72,7 +72,6 @@ class ExpenseActivity : AppCompatActivity() {
                     formattedTime
                 )
             }
-            setResult(Activity.RESULT_OK)
             finish()
         }
         binding.root.setOnTouchListener { _, _ ->
