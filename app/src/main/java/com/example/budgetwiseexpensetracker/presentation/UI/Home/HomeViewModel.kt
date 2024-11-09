@@ -1,5 +1,6 @@
 package com.example.budgetwiseexpensetracker.presentation.UI.Home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,46 +8,41 @@ import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.data.model.Model
 
 class HomeViewModel : ViewModel() {
-    private val _shoppingSpendingSummary = MutableLiveData<Model>()
-    val shoppingSpendingSummary: LiveData<Model> = _shoppingSpendingSummary
+    var list = mutableListOf<Model>()
 
-    fun setShoppingSpendingSummary(model: Model) {
-        _shoppingSpendingSummary.value = model
+    private val _totalSpending = MutableLiveData<String>()
+    val totalSpending: LiveData<String> = _totalSpending
+    fun setTotalSpending(total: String) {
+        _totalSpending.value = total
     }
-    private val _subscriptionSpendingSummary = MutableLiveData<Model>()
-    val subscriptionSpendingSummary: LiveData<Model> = _subscriptionSpendingSummary
-    fun setSubscriptionSpendingSummary(model: Model) {
-        _subscriptionSpendingSummary.value = model
-    }
-    private val _foodSpendingSummary = MutableLiveData<Model>()
-    val foodSpendingSummary: LiveData<Model> = _foodSpendingSummary
-    fun setFoodSpendingSummary(model: Model) {
-        _foodSpendingSummary.value = model
-    }
-    private val _otherSpendingSummary = MutableLiveData<Model>()
-    val otherSpendingSummary: LiveData<Model> = _otherSpendingSummary
-    fun setOtherSpendingSummary(model: Model) {
-        _otherSpendingSummary.value = model
+    private val _totalIncome = MutableLiveData<String>()
+    val totalIncome: LiveData<String> = _totalIncome
+    fun setTotalIncome(total: String) {
+        _totalIncome.value = total
     }
 
-    private val _spendingData = MutableLiveData<List<Model>>()
-    val spendingData: LiveData<List<Model>> = _spendingData
+    val _spendingData = MutableLiveData<MutableList<Model>>()
+    val spendingData: LiveData<MutableList<Model>> = _spendingData
+    fun updateSpendingData(position: String, newAmount: String,newTime:String) {
+        _spendingData.value = list?.map {  item ->
+            if (item.title == position) item.copy(amount = "- $"+newAmount, currentTime = newTime) else item
 
+        }?.toMutableList()
+
+        Log.e("TAG", "updateSpendingData: ${position+" "+newAmount+" "+newTime}")
+        Log.e("TAG", "updateSpendingData: ${_spendingData.value}")
+
+
+    }
     init {
         // Initialize with default data
-        _spendingData.value = listOf(
-            Model("Shopping", "Buy some grocery", R.drawable.shopping, "- $120", "10:00 AM"),
-            Model("Subscription", "Netflix", R.drawable.subscription, "- $80", "10:00 AM"),
-            Model("Food", "Pizza", R.drawable.food, "- $40", "10:00 AM"),
-            Model("Other", "Salary", R.drawable.other, "- $20", "10:00 AM")
+          list= mutableListOf(
+            Model("Shopping", "Buy some grocery", R.drawable.shopping, "- $0", "~", R.color.Shopping),
+            Model("Subscription", "Netflix", R.drawable.subscription, "- $0", "~", R.color.Subscription),
+            Model("Food", "Pizza", R.drawable.food, "- $0", "~", R.color.Food),
+            Model("Other", "Salary", R.drawable.other, "- $0", "~", R.color.Other)
         )
-    }
+        Log.e("init", "updateFromINit: ")
 
-    // Function to update a specific item's amount
-    fun updateAmount(position: Int, newAmount: String) {
-        _spendingData.value = _spendingData.value?.mapIndexed { index, item ->
-            if (index == position) item.copy(amount = newAmount) else item
-        }
     }
-
 }

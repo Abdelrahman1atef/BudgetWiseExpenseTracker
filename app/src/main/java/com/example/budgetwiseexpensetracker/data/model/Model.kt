@@ -6,5 +6,6 @@ data class Model  (
     var subtitle: String? = null,
     var icon: Int = 0,
     var amount: String? = null,
-    var currentTime: String? = null
+    var currentTime: String? = null,
+    var itemColor: Int = 0
 )

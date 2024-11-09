@@ -53,6 +53,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    //EditText
+    implementation ("com.google.android.material:material:1.12.0")
     //Splash
     implementation(libs.androidx.core.splashscreen)
     //ssp-sdp
@@ -64,5 +66,7 @@ dependencies {
     // Chart and graph library
     implementation ("com.github.blackfizz:eazegraph:1.2.2@aar")
     implementation ("com.nineoldandroids:library:2.4.0")
+    //ViewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 
 }

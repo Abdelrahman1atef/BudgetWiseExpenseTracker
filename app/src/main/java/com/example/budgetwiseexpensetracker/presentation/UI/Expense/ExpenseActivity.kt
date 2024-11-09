@@ -1,24 +1,37 @@
 package com.example.budgetwiseexpensetracker.presentation.UI.Expense
 
-import android.graphics.Color
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.databinding.ActivityExpenseBinding
-import com.example.budgetwiseexpensetracker.databinding.ActivityHomeBinding
+import com.example.budgetwiseexpensetracker.presentation.UI.Home.HomeViewModel
+import com.example.budgetwiseexpensetracker.presentation.adapter.CustomSpinnerAdapter
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class ExpenseActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExpenseBinding
+//    private lateinit var viewModel: HomeViewModel
+    private lateinit var sharedViewModel: HomeViewModel //Activity
+    private var SelectedCategory: String? = ""
+    val formattedTime =
+        SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Calendar.getInstance().time)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,40 +43,123 @@ class ExpenseActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+//        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        sharedViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
         initView()
     }
 
     private fun initView() {
-        edittextWatcher()
-        binding.backArrow.setOnClickListener {
-            if (binding.etAmount.text.toString()!="0") {
-                Toast.makeText(this,"click on save",Toast.LENGTH_SHORT).show()
-            }else finish()
+        setBackArrowClick()
+        editTextWatcher()
+        setspinnerAdapter()
+        observeData()
+        binding.btnContinue.setOnClickListener {
+            if (binding.etAmount.text.toString() == "0") {
+                Toast.makeText(this, "Enter Amount", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (SelectedCategory.toString() == "") {
+                Toast.makeText(this, "Select Category", Toast.LENGTH_SHORT).show()
+            }
+//            Log.e("etAmount", "Amount: ${binding.etAmount.text}")
+//            Log.e("spinner2", "Selected item: $SelectedCategory")
+//            Log.e("Time", "time: $formattedTime")
+            SelectedCategory?.let { it1 ->
+                sharedViewModel.updateSpendingData(
+                    it1,
+                    binding.etAmount.text.toString(),
+                    formattedTime
+                )
+            }
+            setResult(Activity.RESULT_OK)
+            finish()
         }
-        spinnerAdapter()
+        binding.root.setOnTouchListener { _, _ ->
+            hideKeyboard()
+            false
+        }
+    }
 
+    private fun observeData() {
 
     }
 
-    private fun spinnerAdapter() {
-        val categories = resources.getStringArray(R.array.Categories)
-        val adapter = object : ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getView(position, convertView, parent) as TextView
-                if (position == 0) {
-                    view.setTextColor(Color.GRAY) // Hint color
+    private fun setBackArrowClick() {
+        var isMessageShown = false // Flag to track if message is shown
+        binding.backArrow.setOnClickListener {
+            if (!isMessageShown) {
+                // Show the message
+                if (binding.etAmount.text.toString() == "0") {
+                    Toast.makeText(
+                        this,
+                        "Click the back arrow again to confirm",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    isMessageShown = true // Set flag to true after showing the message
                 } else {
-                    view.setTextColor(Color.BLACK) // Regular item color
+                    finish() // Close activity if amount is 0
                 }
-                return view
+            } else {
+                // Close activity if message has already been shown
+                finish()
+            }
+        }
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        currentFocus?.let { inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0) }
+        binding.etAmount.clearFocus()
+        binding.textInputEditText.clearFocus()
+    }
+
+    private fun setspinnerAdapter() {
+        binding.spinner.setSelection(0)
+        // Initialize CustomSpinnerAdapter
+        val categories = resources.getStringArray(R.array.Categories)
+        val customSpinnerAdapter = CustomSpinnerAdapter(this, categories)
+        // Set adapter to spinner
+        binding.spinner.adapter = customSpinnerAdapter
+        spinnerAdapter(customSpinnerAdapter, categories)
+    }
+
+    private fun spinnerAdapter(
+        customSpinnerAdapter: CustomSpinnerAdapter,
+        categories: Array<String>
+    ) {
+        var selectedCategory: String
+        // Set OnItemSelectedListener
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (position != customSpinnerAdapter.hidingItemIndex) {
+                    customSpinnerAdapter.selectedPosition = position
+                    SelectedCategory = when {
+                        customSpinnerAdapter.selectedPosition <= 0 -> categories[customSpinnerAdapter.selectedPosition + 1]
+                        customSpinnerAdapter.selectedPosition >= categories.size -> ""
+                        else -> categories[customSpinnerAdapter.selectedPosition]
+                    }
+                    Log.e("spinner1", "Selected item: ${categories[position]}")
+                    Log.e("spinner2", "Selected item: $SelectedCategory")
+
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                Log.e("spinner", "No item selected")
             }
         }
 
-// Set the adapter
-        binding.spinner.adapter = adapter
+
     }
 
-    private fun edittextWatcher() {
+    private fun editTextWatcher() {
         binding.etAmount.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 // No action here to avoid interfering with typing

@@ -11,14 +11,18 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.databinding.ActivityExpenseBinding
 import com.example.budgetwiseexpensetracker.databinding.FragmentExpenseBinding
+import com.example.budgetwiseexpensetracker.presentation.UI.Home.HomeViewModel
 
 
 class ExpenseFragment : Fragment() {
     private lateinit var binding: FragmentExpenseBinding
+    private lateinit var viewModel: HomeViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +35,7 @@ class ExpenseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
         initView()
 
     }
@@ -39,7 +44,7 @@ class ExpenseFragment : Fragment() {
         binding.backArrow.setOnClickListener {
             if (binding.etAmount.text.toString()!="0") {
                 Toast.makeText(requireContext(),"click on save", Toast.LENGTH_SHORT).show()
-            }else findNavController().navigateUp()
+            }else findNavController().popBackStack()
         }
         spinnerAdapter()
     }

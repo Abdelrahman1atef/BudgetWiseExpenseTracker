@@ -1,19 +1,26 @@
 package com.example.budgetwiseexpensetracker.presentation.UI.Home
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budgetwiseexpensetracker.R
+import com.example.budgetwiseexpensetracker.data.model.Model
 import com.example.budgetwiseexpensetracker.databinding.FragmentHomeBinding
+import com.example.budgetwiseexpensetracker.presentation.UI.Expense.ExpenseActivity
 import com.example.budgetwiseexpensetracker.presentation.adapter.HomeRecyclerAdapter
+import org.eazegraph.lib.models.PieModel
 
 class HomeFragment : Fragment() {
     private val rotateOpen: Animation by lazy {
@@ -41,15 +48,11 @@ class HomeFragment : Fragment() {
         )
     }
     private var clicked = false
-
-//    private val tvShopping: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvShoppingMoneyUsed }
-//    private val tvSubscription: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvSubscriptionMoneyUsed }
-//    private val tvFood: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvFoodMoneyUsed }
-//    private val tvOther: TextView by lazy { binding.fragmentMonthlySpendingSummary.tvOtherMoneyUsed }
     private val pieChart: org.eazegraph.lib.charts.PieChart by lazy { binding.fragmentMonthlySpendingSummary.piechart }
     private lateinit var binding: FragmentHomeBinding
     private val rvRecentSpending:RecyclerView by lazy{binding.fragmentMonthlySpendingSummary.rvRecentSpending}
-    private lateinit var viewModel:HomeViewModel
+//    private lateinit var viewModel:HomeViewModel
+    private val sharedViewModel: HomeViewModel by activityViewModels() //Fragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,31 +66,67 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.bottomNavigationMainPage.menu.getItem(2).isEnabled = false
+        setAdapter()
         initView()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        serObserver()
     }
 
     private fun initView() {
         fabMainPage()
-        pieChart()
-        setAdapter()
         setViewModel()
     }
 
     private fun setViewModel() {
-        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        serObserver()
+//        sharedViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
+
+//        private val sharedViewModel: SharedViewModel by activityViewModels() //Fragment
+
+//        private lateinit var sharedViewModel: SharedViewModel //Activity
+//        sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
+
+        // Update RecyclerView
+        (rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(sharedViewModel.list)
+        // Update Pie Chart
+        updatePieChart(sharedViewModel.list)
     }
 
     private fun serObserver() {
-        viewModel.spendingData.observe(viewLifecycleOwner) { newData ->
-            if (rvRecentSpending.adapter is HomeRecyclerAdapter){
-                val adapter = rvRecentSpending.adapter as HomeRecyclerAdapter
-                adapter.setData(newData)
+        Log.e("FTAG", "serObserver: HHHHHHHHHHHHHHHHHHHHH")
+
+        sharedViewModel._spendingData.observe(viewLifecycleOwner) { spendingData ->
+            // Update RecyclerView
+            (rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(spendingData)
+            // Update Pie Chart
+            updatePieChart(spendingData)
+
+
+        }
+    }
+    private fun updatePieChart(spendingData: MutableList<Model>?) {
+        pieChart.clearChart()  // Clear previous data to prevent overlap
+        if (spendingData != null) {
+            spendingData.forEach { item ->
+                pieChart.addPieSlice(
+                    item.amount?.let {
+                        PieModel(
+                            item.title,  // Title from the spending data
+                            it.toString().replace(),  // Amount converted to Float
+                            resources.getColor(item.itemColor, null)  // Color resource ID for each category
+                        )
+                    }
+                )
             }
         }
+        pieChart.startAnimation()  // Start animation
     }
 
     private fun setAdapter(){
+        Log.e("TAG", "setAdapter: ", )
         rvRecentSpending.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = HomeRecyclerAdapter()
@@ -97,48 +136,7 @@ class HomeFragment : Fragment() {
     private fun String.replace( ): Float {
         return this.replace("- $", "").toFloat()
     }
-    private fun pieChart() {
-//        pieChart.addPieSlice(
-//            PieModel(
-//                "Shopping",
-//                tvShopping.getText().toString().replace(),
-////                Color.parseColor("#FCAC12")
-////                Color.parseColor("#"+Integer.toHexString(getResources().getColor(R.color.Shopping)).replace("ff",""))
-//                resources.getColor(R.color.Shopping, null)
-//
-//            )
-//        )
-//        pieChart.addPieSlice(
-//            PieModel(
-//                "Subscription",
-//                tvSubscription.text.toString().replace(),
-////                Color.parseColor("#7F3DFF")
-////                Color.parseColor("#"+Integer.toHexString(getResources().getColor(R.color.Subscription)).replace("ff",""))
-//                resources.getColor(R.color.Subscription, null)
-//            )
-//        )
-//        pieChart.addPieSlice(
-//            PieModel(
-//                "Food",
-//                tvFood.text.toString().replace(),
-////                Color.parseColor("#FD3C4A")
-////                Color.parseColor("#"+Integer.toHexString(getResources().getColor(R.color.Food)).replace("ff",""))
-//                resources.getColor(R.color.Food, null)
-//            )
-//        )
-//        pieChart.addPieSlice(
-//            PieModel(
-//                "Other",
-//                tvOther.text.toString().replace(),
-////                Color.parseColor("#0276AD")
-////                Color.parseColor("#"+Integer.toHexString(getResources().getColor(R.color.Other)).replace("ff",""))
-//                resources.getColor(R.color.Other, null)
-//            )
-//        )
-        // To animate the pie chart
-        pieChart.startAnimation()
 
-    }
 
     private fun fabMainPage() {
         binding.fabMainPage.setOnClickListener {
@@ -148,25 +146,34 @@ class HomeFragment : Fragment() {
 //                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
 //                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 //            )
+
             clicked = !clicked
         }
         binding.addExpense.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_expenseFragment)
+//            findNavController().navigate(R.id.action_homeFragment_to_expenseFragment)
+            val intent = Intent(requireContext(), ExpenseActivity::class.java)
+            startActivity(intent)
+            setVisibility(clicked)
+            setAnimation(clicked)
+            clicked = !clicked
         }
         binding.addIncome.setOnClickListener {
 //            intent = android.content.Intent(this, ExpenseActivity::class.java)
 //            startActivity(intent)
+            setVisibility(clicked)
+            setAnimation(clicked)
+            clicked = !clicked
         }
     }
 
     private fun setVisibility(clicked: Boolean) {
         if (!clicked) {
-            binding.addIncome.visibility = android.view.View.VISIBLE
-            binding.addExpense.visibility = android.view.View.VISIBLE
+            binding.addIncome.visibility = View.VISIBLE
+            binding.addExpense.visibility = View.VISIBLE
 
         } else {
-            binding.addIncome.visibility = android.view.View.INVISIBLE
-            binding.addExpense.visibility = android.view.View.INVISIBLE
+            binding.addIncome.visibility = View.INVISIBLE
+            binding.addExpense.visibility = View.INVISIBLE
         }
     }
 
@@ -181,6 +188,8 @@ class HomeFragment : Fragment() {
             binding.fabMainPage.startAnimation(rotateClose)
         }
     }
+
+
 
 
 
