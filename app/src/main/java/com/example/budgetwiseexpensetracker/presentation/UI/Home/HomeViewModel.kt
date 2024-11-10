@@ -21,18 +21,26 @@ class HomeViewModel : ViewModel() {
         _totalIncome.value = total
     }
 
-    val _spendingData = MutableLiveData<MutableList<Model>>()
+
+    private val _spendingData = MutableLiveData<MutableList<Model>>()
     val spendingData: LiveData<MutableList<Model>> = _spendingData
     fun updateSpendingData(position: String, newAmount: String,newTime:String) {
+        Log.e("TAG", "updateSpendingData: $list")
         _spendingData.value = list?.map {  item ->
-            if (item.title == position) item.copy(amount = "- $"+newAmount, currentTime = newTime) else item
+            if (item.title == position) item.apply {
+                amount = "- $"+(((amount)?.replace( ) )?.plus((newAmount).toFloat())).toString()
+                currentTime = newTime }
+            else item
 
         }?.toMutableList()
+        Log.e("TAG", "updateSpendingData: ${"$position $newAmount $newTime"}")
         Log.e("TAG", "updateSpendingData: ${spendingData.value}")
-        Log.e("TAG", "updateSpendingData: ${position+" "+newAmount+" "+newTime}")
         Log.e("TAG", "_updateSpendingData: ${_spendingData.value}")
 
 
+    }
+    private fun String.replace( ): Float {
+        return this.replace("- $", "").toFloat()
     }
     init {
         // Initialize with default data

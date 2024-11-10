@@ -50,6 +50,7 @@ class HomeFragment : Fragment() {
     private var clicked = false
     private lateinit var binding: FragmentHomeBinding
     private lateinit var homeRecyclerAdapter: HomeRecyclerAdapter
+    var fristTime =true
 
 //        private lateinit var viewModel:HomeViewModel
     private val sharedViewModel: HomeViewModel by activityViewModels() //Fragment
@@ -89,12 +90,18 @@ class HomeFragment : Fragment() {
 //        private lateinit var sharedViewModel: SharedViewModel //Activity
 //        sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
 
-        // Update RecyclerView
-        (binding.fragmentMonthlySpendingSummary.rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(sharedViewModel.list)
-        // Update Pie Chart
-        updatePieChart(sharedViewModel.list)
-        Log.e("FTAG", "1serObserver: HHHHHHHHHHHHHHHHHHHHH")
-        Log.e("FTAG", "1serObserver: ${sharedViewModel.list}")
+        if(fristTime){
+            Log.e("FTAG", "1serObserver: $fristTime")
+
+            // Update RecyclerView
+            (binding.fragmentMonthlySpendingSummary.rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(sharedViewModel.list)
+            // Update Pie Chart
+            updatePieChart(sharedViewModel.list)
+            Log.e("FTAG", "1serObserver: HHHHHHHHHHHHHHHHHHHHH")
+            Log.e("FTAG", "1serObserver: ${sharedViewModel.list}")
+            fristTime=false
+        }
+
 
     }
 

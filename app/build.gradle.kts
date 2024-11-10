@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+//    id("com.google.devtools.ksp")
 }
 
 android {
@@ -68,5 +69,9 @@ dependencies {
     implementation ("com.nineoldandroids:library:2.4.0")
     //ViewModel
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    //Room
+//    implementation (libs.androidx.room.runtime)
+//    ksp (libs.androidx.room.compiler)
+//    implementation (libs.androidx.room.ktx)
 
 }
