@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.UI.Expense.ExpenseActivity">
+    >
 
     <LinearLayout
         android:id="@+id/header_title"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/main_red"
+        android:background="@color/sec_green"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/_25sdp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -38,7 +38,7 @@
                 style="@style/eiTitleTextStyleEI"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Expense"
+                android:text="Income"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:selectAllOnFocus="true"
                     android:text="0" />
             </LinearLayout>
@@ -98,7 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_25sdp"
-            android:entries="@array/Categories"
+            android:entries="@array/IncomeCategories"
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

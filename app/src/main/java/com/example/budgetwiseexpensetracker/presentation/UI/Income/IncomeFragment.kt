@@ -1,87 +1,72 @@
-package com.example.budgetwiseexpensetracker.presentation.UI.Expense
+package com.example.budgetwiseexpensetracker.presentation.UI.Income
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.budgetwiseexpensetracker.R
-import com.example.budgetwiseexpensetracker.databinding.ActivityExpenseBinding
+import com.example.budgetwiseexpensetracker.databinding.FragmentIncomeBinding
 import com.example.budgetwiseexpensetracker.presentation.UI.Home.HomeViewModel
 import com.example.budgetwiseexpensetracker.presentation.adapter.CustomSpinnerAdapter
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
-class ExpenseActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityExpenseBinding
-//    private lateinit var viewModel: HomeViewModel
-    private lateinit var sharedViewModel: HomeViewModel //Activity
+class IncomeFragment : Fragment() {
+    private lateinit var binding: FragmentIncomeBinding
+    private val sharedViewModel: HomeViewModel by activityViewModels()
     private var SelectedCategory: String? = ""
     val formattedTime =
         SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Calendar.getInstance().time)
+    override fun onCreateView(
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = ActivityExpenseBinding.inflate(layoutInflater)
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentIncomeBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-//        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        sharedViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
+
     }
 
     private fun initView() {
         setBackArrowClick()
         editTextWatcher()
         setspinnerAdapter()
-        observeData()
         binding.btnContinue.setOnClickListener {
             if (binding.etAmount.text.toString() == "0") {
-                Toast.makeText(this, "Enter Amount", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Enter Amount", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (SelectedCategory.toString() == "") {
-                Toast.makeText(this, "Select Category", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Select Category", Toast.LENGTH_SHORT).show()
             }
-//            Log.e("etAmount", "Amount: ${binding.etAmount.text}")
-//            Log.e("spinner2", "Selected item: $SelectedCategory")
+            Log.e("etAmount", "Amount: ${binding.etAmount.text}")
+            Log.e("spinner2", "Selected item: $SelectedCategory")
 //            Log.e("Time", "time: $formattedTime")
-            SelectedCategory?.let { it1 ->
-                sharedViewModel.updateSpendingData(
-                    it1,
-                    binding.etAmount.text.toString(),
-                    formattedTime
-                )
-            }
-            finish()
+//            sharedViewModel.
+            sharedViewModel.totalIncome()
+            findNavController().navigateUp()
         }
         binding.root.setOnTouchListener { _, _ ->
             hideKeyboard()
             false
         }
-    }
-
-    private fun observeData() {
-
     }
 
     private fun setBackArrowClick() {
@@ -91,25 +76,27 @@ class ExpenseActivity : AppCompatActivity() {
                 // Show the message
                 if (binding.etAmount.text.toString() == "0") {
                     Toast.makeText(
-                        this,
+                        requireContext(),
                         "Click the back arrow again to confirm",
                         Toast.LENGTH_SHORT
                     ).show()
                     isMessageShown = true // Set flag to true after showing the message
                 } else {
-                    finish() // Close activity if amount is 0
+                    findNavController().navigateUp() // Close activity if amount is 0
                 }
             } else {
                 // Close activity if message has already been shown
-                finish()
+                findNavController().navigateUp()
             }
         }
     }
 
     private fun hideKeyboard() {
         val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        currentFocus?.let { inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0) }
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        activity?.currentFocus?.let { view ->
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
         binding.etAmount.clearFocus()
         binding.textInputEditText.clearFocus()
     }
@@ -117,8 +104,8 @@ class ExpenseActivity : AppCompatActivity() {
     private fun setspinnerAdapter() {
         binding.spinner.setSelection(0)
         // Initialize CustomSpinnerAdapter
-        val categories = resources.getStringArray(R.array.Categories)
-        val customSpinnerAdapter = CustomSpinnerAdapter(this, categories)
+        val categories = resources.getStringArray(R.array.IncomeCategories)
+        val customSpinnerAdapter = CustomSpinnerAdapter(requireContext(), categories)
         // Set adapter to spinner
         binding.spinner.adapter = customSpinnerAdapter
         spinnerAdapter(customSpinnerAdapter, categories)
@@ -128,7 +115,6 @@ class ExpenseActivity : AppCompatActivity() {
         customSpinnerAdapter: CustomSpinnerAdapter,
         categories: Array<String>
     ) {
-        var selectedCategory: String
         // Set OnItemSelectedListener
         binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -149,7 +135,6 @@ class ExpenseActivity : AppCompatActivity() {
 
                 }
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {
                 Log.e("spinner", "No item selected")
             }
@@ -182,4 +167,5 @@ class ExpenseActivity : AppCompatActivity() {
             }
         }
     }
+
 }

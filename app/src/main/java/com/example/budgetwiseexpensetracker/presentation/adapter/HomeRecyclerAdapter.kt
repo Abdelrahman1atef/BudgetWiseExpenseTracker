@@ -4,10 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.data.model.Model
 import com.example.budgetwiseexpensetracker.databinding.MonthlySpendingItemBinding
-import org.eazegraph.lib.models.PieModel
 
 class HomeRecyclerAdapter : RecyclerView.Adapter<HomeRecyclerAdapter.HomeViewHolder>() {
 //    private var model: ArrayList<Model> = ArrayList()

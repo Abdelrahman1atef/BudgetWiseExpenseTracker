@@ -3,16 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/mainFragment">
+
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.budgetwiseexpensetracker.presentation.UI.Home.HomeFragment"
-        android:label="HomeFragment"
-        tools:layout="@layout/fragment_home"
-        >
+        android:id="@+id/mainFragment"
+        android:name="com.example.budgetwiseexpensetracker.presentation.UI.mainFragment.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
         <action
-            android:id="@+id/action_homeFragment_to_expenseFragment"
+            android:id="@+id/action_mainFragment_to_expenseFragment2"
             app:destination="@id/expenseFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_incomeFragment"
+            app:destination="@id/incomeFragment" />
     </fragment>
 
     <fragment
@@ -21,4 +24,11 @@
         android:label="ExpenseFragment"
         tools:layout="@layout/fragment_expense"
         />
+    <fragment
+        android:id="@+id/incomeFragment"
+        android:name="com.example.budgetwiseexpensetracker.presentation.UI.Income.IncomeFragment"
+        android:label="IncomeFragment"
+        tools:layout="@layout/fragment_income"/>
+
+
 </navigation>

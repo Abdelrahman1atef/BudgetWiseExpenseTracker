@@ -20,7 +20,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.budgetwiseexpensetracker.R
-import com.example.budgetwiseexpensetracker.databinding.ActivityExpenseBinding
 import com.example.budgetwiseexpensetracker.databinding.FragmentExpenseBinding
 import com.example.budgetwiseexpensetracker.presentation.UI.Home.HomeViewModel
 import com.example.budgetwiseexpensetracker.presentation.adapter.CustomSpinnerAdapter
@@ -31,7 +30,6 @@ import java.util.Locale
 
 class ExpenseFragment : Fragment() {
     private lateinit var binding: FragmentExpenseBinding
-        private lateinit var viewModel: HomeViewModel
     private val sharedViewModel: HomeViewModel by activityViewModels()
     private var SelectedCategory: String? = ""
     val formattedTime =
@@ -61,7 +59,6 @@ class ExpenseFragment : Fragment() {
         setBackArrowClick()
         editTextWatcher()
         setspinnerAdapter()
-        observeData()
         binding.btnContinue.setOnClickListener {
             if (binding.etAmount.text.toString() == "0") {
                 Toast.makeText(requireContext(), "Enter Amount", Toast.LENGTH_SHORT).show()
@@ -80,6 +77,8 @@ class ExpenseFragment : Fragment() {
                     formattedTime
                 )
             }
+
+            sharedViewModel.totalSpending()
             findNavController().navigateUp()
         }
         binding.root.setOnTouchListener { _, _ ->
@@ -88,9 +87,6 @@ class ExpenseFragment : Fragment() {
         }
     }
 
-    private fun observeData() {
-
-    }
 
     private fun setBackArrowClick() {
         var isMessageShown = false // Flag to track if message is shown
@@ -127,7 +123,7 @@ class ExpenseFragment : Fragment() {
     private fun setspinnerAdapter() {
         binding.spinner.setSelection(0)
         // Initialize CustomSpinnerAdapter
-        val categories = resources.getStringArray(R.array.Categories)
+        val categories = resources.getStringArray(R.array.ExpenseCategories)
         val customSpinnerAdapter = CustomSpinnerAdapter(requireContext(), categories)
         // Set adapter to spinner
         binding.spinner.adapter = customSpinnerAdapter
@@ -138,7 +134,6 @@ class ExpenseFragment : Fragment() {
         customSpinnerAdapter: CustomSpinnerAdapter,
         categories: Array<String>
     ) {
-        var selectedCategory: String
         // Set OnItemSelectedListener
         binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -159,7 +154,6 @@ class ExpenseFragment : Fragment() {
 
                 }
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {
                 Log.e("spinner", "No item selected")
             }
