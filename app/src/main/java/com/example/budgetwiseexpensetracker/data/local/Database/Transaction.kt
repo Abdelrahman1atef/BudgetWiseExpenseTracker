@@ -2,7 +2,6 @@ package com.example.myroomdatabase.Database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.budgetwiseexpensetracker.data.model.Model
 
 
 @Entity(tableName = "transaction")
@@ -15,7 +14,7 @@ data class Transaction(
     var amount: String? = null,
     var currentTime: String? = null,
     var itemColor: Int = 0,
-    var Type: String? = null
+    var type: String? = null
 )
 //
 //fun Transaction.toTransactionDetail(): Model = Model(

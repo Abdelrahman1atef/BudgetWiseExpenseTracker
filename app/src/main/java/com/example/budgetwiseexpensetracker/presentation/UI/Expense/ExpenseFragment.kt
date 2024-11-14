@@ -18,8 +18,11 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.budgetwiseexpensetracker.R
+import com.example.budgetwiseexpensetracker.base.ViewState
+import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.FragmentExpenseBinding
 import com.example.budgetwiseexpensetracker.presentation.UI.Home.HomeViewModel
 import com.example.budgetwiseexpensetracker.presentation.adapter.CustomSpinnerAdapter
@@ -30,7 +33,8 @@ import java.util.Locale
 
 class ExpenseFragment : Fragment() {
     private lateinit var binding: FragmentExpenseBinding
-    private val sharedViewModel: HomeViewModel by activityViewModels()
+//    private val sharedViewModel: HomeViewModel by activityViewModels()
+    private lateinit var viewModel: ExpenseViewModel
     private var SelectedCategory: String? = ""
     val formattedTime =
         SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Calendar.getInstance().time)
@@ -59,6 +63,15 @@ class ExpenseFragment : Fragment() {
         setBackArrowClick()
         editTextWatcher()
         setspinnerAdapter()
+        saveData()
+
+        binding.root.setOnTouchListener { _, _ ->
+            hideKeyboard()
+            false
+        }
+    }
+
+    private fun saveData() {
         binding.btnContinue.setOnClickListener {
             if (binding.etAmount.text.toString() == "0") {
                 Toast.makeText(requireContext(), "Enter Amount", Toast.LENGTH_SHORT).show()
@@ -70,20 +83,26 @@ class ExpenseFragment : Fragment() {
 //            Log.e("etAmount", "Amount: ${binding.etAmount.text}")
 //            Log.e("spinner2", "Selected item: $SelectedCategory")
 //            Log.e("Time", "time: $formattedTime")
-            SelectedCategory?.let { it1 ->
-                sharedViewModel.updateSpendingData(
-                    it1,
-                    binding.etAmount.text.toString(),
-                    formattedTime
-                )
-            }
+//            SelectedCategory?.let { it1 ->
+//                sharedViewModel.updateSpendingData(
+//                    it1,
+//                    binding.etAmount.text.toString(),
+//                    formattedTime
+//                )
+//            }
+//            sharedViewModel.totalSpending()
 
-            sharedViewModel.totalSpending()
+            lifecycleScope.launchWhenStarted {
+                viewModel.saveTransaction(TransactionModel(
+                    title = SelectedCategory.toString(),
+                    subtitle = "",
+//                    icon = R.drawable.shopping,
+                    amount = "- $"+binding.etAmount.text.toString(),
+                    currentTime = formattedTime,
+//                    itemColor = R.color.Shopping
+                ))
+            }
             findNavController().navigateUp()
-        }
-        binding.root.setOnTouchListener { _, _ ->
-            hideKeyboard()
-            false
         }
     }
 
@@ -133,7 +152,9 @@ class ExpenseFragment : Fragment() {
     private fun spinnerAdapter(
         customSpinnerAdapter: CustomSpinnerAdapter,
         categories: Array<String>
-    ) {
+    )
+    {
+
         // Set OnItemSelectedListener
         binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -161,7 +182,6 @@ class ExpenseFragment : Fragment() {
 
 
     }
-
     private fun editTextWatcher() {
         binding.etAmount.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

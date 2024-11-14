@@ -4,20 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.budgetwiseexpensetracker.data.model.Model
+import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.MonthlySpendingItemBinding
 
 class HomeRecyclerAdapter : RecyclerView.Adapter<HomeRecyclerAdapter.HomeViewHolder>() {
 //    private var model: ArrayList<Model> = ArrayList()
-private var model: MutableList<Model> = emptyList<Model>().toMutableList()
+private var transactionModels: MutableList<TransactionModel> = emptyList<TransactionModel>().toMutableList()
 
     inner class HomeViewHolder(val binding: MonthlySpendingItemBinding) : ViewHolder(binding.root) {
-        fun onBind(model: Model) {
-            binding.tvTitle.text = model.title
-            binding.tvSubtitle.text = model.subtitle
-            binding.ivIcon.setImageResource(model.icon)
-            binding.tvAmount.text = model.amount
-            binding.tvTime.text = model.currentTime
+        fun onBind(transactionModel: TransactionModel) {
+            binding.tvTitle.text = transactionModel.title
+            binding.tvSubtitle.text = transactionModel.subtitle
+            binding.ivIcon.setImageResource(transactionModel.icon)
+            binding.tvAmount.text = transactionModel.amount
+            binding.tvTime.text = transactionModel.currentTime
         }
     }
 
@@ -26,14 +26,14 @@ private var model: MutableList<Model> = emptyList<Model>().toMutableList()
     }
 
     override fun getItemCount(): Int {
-        return model.size
+        return transactionModels.size
     }
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
-        holder.onBind(model[position])
+        holder.onBind(transactionModels[position])
     }
-    fun setData(newData: MutableList<Model>) {
-        model = newData
+    fun setData(newData: MutableList<TransactionModel>) {
+        transactionModels = newData
         notifyDataSetChanged()
     }
 }

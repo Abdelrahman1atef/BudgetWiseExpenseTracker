@@ -1,7 +1,6 @@
 package com.example.budgetwiseexpensetracker.data.local.State
 
 import com.example.budgetwiseexpensetracker.data.local.Event.SortType
-import com.example.budgetwiseexpensetracker.data.model.Model
 import com.example.myroomdatabase.Database.Transaction
 
 data class TransactionState (

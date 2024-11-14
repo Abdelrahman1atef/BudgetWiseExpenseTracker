@@ -1,7 +1,7 @@
 package com.example.budgetwiseexpensetracker.data.model
 
 
-data class Model  (
+data class TransactionModel  (
     var title: String? = null,
     var subtitle: String? = null,
     var icon: Int = 0,

@@ -1,31 +1,101 @@
 package com.example.budgetwiseexpensetracker.presentation.UI.Home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.budgetwiseexpensetracker.R
-import com.example.budgetwiseexpensetracker.data.local.Event.SortType
-import com.example.budgetwiseexpensetracker.data.local.Event.TransactionEvent
-import com.example.budgetwiseexpensetracker.data.local.State.TransactionState
-import com.example.budgetwiseexpensetracker.data.model.Model
-import com.example.myroomdatabase.Database.Transaction
-import com.example.myroomdatabase.Database.TransactionDao
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.example.budgetwiseexpensetracker.base.ViewState
+import com.example.budgetwiseexpensetracker.data.model.TransactionModel
+import com.example.budgetwiseexpensetracker.domain.usecase.GetRecentTransactionUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
-class HomeViewModel
+class HomeViewModel(
+    val getRecentTransaction: GetRecentTransactionUseCase
+)
  : ViewModel() {
-    var list = mutableListOf<Model>()
 
+     var _showRecentTransaction=
+         MutableStateFlow<ViewState<MutableList<TransactionModel>>>(ViewState.Empty())
+    val showRecentTransactionUseCase: MutableStateFlow<ViewState<MutableList<TransactionModel>>> =_showRecentTransaction
+    fun getRecentTransaction(){
+        viewModelScope.launch {
+            getRecentTransaction.getRecentTransactions().collect{
+                val state : ViewState<MutableList<TransactionModel>> =when (it) {
+                    it -> ViewState.Loaded(it)
+                    else -> ViewState.Empty()
+                }
+                _showRecentTransaction.value=state
+            }
+        }
+    }
+
+
+
+    var list = mutableListOf<TransactionModel>()
+
+
+    private val _totalIncome: MutableLiveData<Int> = MutableLiveData<Int>()
+    val totalIncome: LiveData<Int> = _totalIncome
+    fun totalIncome() {
+        _totalIncome.value = list.sumOf { item -> item.amount?.replace()?.toInt() ?: 0 }
+    }
+
+    private val _totalExpense: MutableLiveData<Int> = MutableLiveData<Int>()
+    val totalExpense: LiveData<Int> = _totalExpense
+    fun totalSpending() {
+        _totalExpense.value = list.sumOf { item -> item.amount?.replace()?.toInt() ?: 0 }
+    }
+
+    private val _spendingData = MutableLiveData<MutableList<TransactionModel>>()
+    val spendingData: LiveData<MutableList<TransactionModel>> = _spendingData
+    fun updateSpendingData(position: String, newAmount: String, newTime: String) {
+        _spendingData.value = list?.map { item ->
+            if (item.title == position) item.apply {
+                amount = "- $" + (((amount)?.replace())?.plus((newAmount).toFloat())).toString()
+                currentTime = newTime
+            }
+            else item
+
+        }?.toMutableList()
+    }
+
+//    init {
+//        // Initialize with default data
+//        list = mutableListOf(
+//            TransactionModel(
+//                "Shopping",
+//                "Buy some grocery",
+//                R.drawable.shopping,
+//                "- $0",
+//                "~",
+//                R.color.Shopping
+//            ),
+//            TransactionModel(
+//                "Subscription",
+//                "Netflix",
+//                R.drawable.subscription,
+//                "- $0",
+//                "~",
+//                R.color.Subscription
+//            ),
+//            TransactionModel("Food", "Pizza", R.drawable.food, "- $0", "~", R.color.Food),
+//            TransactionModel("Other", "Salary", R.drawable.other, "- $0", "~", R.color.Other)
+//        )
+//        _totalExpense.value = 0
+//        _totalIncome.value = 0
+//
+//
+//        Log.e("init", "updateFromInit: ")
+//
+//    }
+
+    private fun String.replace(): Float {
+        return this.replace("- $", "").toFloat()
+    }
+
+
+    /*
 //    private val _sortType = MutableStateFlow(SortType.NONE)
 //    @OptIn(ExperimentalCoroutinesApi::class)
 //    private val _trasaction= _sortType
@@ -150,63 +220,5 @@ class HomeViewModel
 //
 //        }
 //    }
-
-    private val _totalIncome: MutableLiveData<Int> = MutableLiveData<Int>()
-    val totalIncome: LiveData<Int> = _totalIncome
-    fun totalIncome() {
-        _totalIncome.value = list.sumOf { item -> item.amount?.replace()?.toInt() ?: 0 }
-    }
-
-    private val _totalExpense: MutableLiveData<Int> = MutableLiveData<Int>()
-    val totalExpense: LiveData<Int> = _totalExpense
-    fun totalSpending() {
-        _totalExpense.value = list.sumOf { item -> item.amount?.replace()?.toInt() ?: 0 }
-    }
-
-    private val _spendingData = MutableLiveData<MutableList<Model>>()
-    val spendingData: LiveData<MutableList<Model>> = _spendingData
-    fun updateSpendingData(position: String, newAmount: String, newTime: String) {
-        _spendingData.value = list?.map { item ->
-            if (item.title == position) item.apply {
-                amount = "- $" + (((amount)?.replace())?.plus((newAmount).toFloat())).toString()
-                currentTime = newTime
-            }
-            else item
-
-        }?.toMutableList()
-    }
-
-    init {
-        // Initialize with default data
-        list = mutableListOf(
-            Model(
-                "Shopping",
-                "Buy some grocery",
-                R.drawable.shopping,
-                "- $0",
-                "~",
-                R.color.Shopping
-            ),
-            Model(
-                "Subscription",
-                "Netflix",
-                R.drawable.subscription,
-                "- $0",
-                "~",
-                R.color.Subscription
-            ),
-            Model("Food", "Pizza", R.drawable.food, "- $0", "~", R.color.Food),
-            Model("Other", "Salary", R.drawable.other, "- $0", "~", R.color.Other)
-        )
-        _totalExpense.value = 0
-        _totalIncome.value = 0
-
-
-        Log.e("init", "updateFromInit: ")
-
-    }
-
-    private fun String.replace(): Float {
-        return this.replace("- $", "").toFloat()
-    }
+*/
 }
