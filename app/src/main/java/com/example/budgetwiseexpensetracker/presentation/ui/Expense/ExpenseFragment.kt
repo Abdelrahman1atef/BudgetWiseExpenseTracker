@@ -1,7 +1,6 @@
-package com.example.budgetwiseexpensetracker.presentation.UI.Expense
+package com.example.budgetwiseexpensetracker.presentation.ui.Expense
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,19 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.budgetwiseexpensetracker.R
-import com.example.budgetwiseexpensetracker.base.ViewState
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.FragmentExpenseBinding
-import com.example.budgetwiseexpensetracker.presentation.UI.Home.HomeViewModel
 import com.example.budgetwiseexpensetracker.presentation.adapter.CustomSpinnerAdapter
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -33,14 +26,10 @@ import java.util.Locale
 
 class ExpenseFragment : Fragment() {
     private lateinit var binding: FragmentExpenseBinding
-//    private val sharedViewModel: HomeViewModel by activityViewModels()
-    private lateinit var viewModel: ExpenseViewModel
+    private val viewModel by viewModel<ExpenseViewModel>()
     private var SelectedCategory: String? = ""
     val formattedTime =
         SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Calendar.getInstance().time)
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,11 +41,7 @@ class ExpenseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
-//        sharedViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         initView()
-
-
     }
 
     private fun initView() {
@@ -64,7 +49,6 @@ class ExpenseFragment : Fragment() {
         editTextWatcher()
         setspinnerAdapter()
         saveData()
-
         binding.root.setOnTouchListener { _, _ ->
             hideKeyboard()
             false
@@ -96,13 +80,33 @@ class ExpenseFragment : Fragment() {
                 viewModel.saveTransaction(TransactionModel(
                     title = SelectedCategory.toString(),
                     subtitle = "",
-//                    icon = R.drawable.shopping,
+                    icon = setIcon(),                                 // R.drawable.shopping,
                     amount = "- $"+binding.etAmount.text.toString(),
                     currentTime = formattedTime,
-//                    itemColor = R.color.Shopping
+                    itemColor =  setItemColor()                       //R.color.Shopping
                 ))
             }
             findNavController().navigateUp()
+        }
+    }
+
+    private fun setItemColor(): Int {
+        when(SelectedCategory){
+            "Shopping"->return R.color.Shopping
+            "Subscription"->return R.color.Subscription
+            "Food"->return R.color.Food
+            "Other"->return R.color.Other
+            else->return R.color.Shopping
+        }
+    }
+
+    private fun setIcon(): Int {
+        when (SelectedCategory) {
+            "Shopping" -> return R.drawable.shopping
+            "Subscription" -> return R.drawable.subscription
+            "Food" -> return R.drawable.food
+            "Other" -> return R.drawable.other
+            else -> return R.drawable.shopping
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.budgetwiseexpensetracker.presentation.UI.Income
+package com.example.budgetwiseexpensetracker.presentation.ui.Income
 
 import android.content.Context
 import android.os.Bundle
@@ -16,7 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.databinding.FragmentIncomeBinding
-import com.example.budgetwiseexpensetracker.presentation.UI.Home.HomeViewModel
+import com.example.budgetwiseexpensetracker.presentation.ui.home.HomeViewModel
 import com.example.budgetwiseexpensetracker.presentation.adapter.CustomSpinnerAdapter
 import java.text.SimpleDateFormat
 import java.util.Calendar

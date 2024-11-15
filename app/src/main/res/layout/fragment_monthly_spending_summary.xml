@@ -7,7 +7,7 @@
     android:layout_marginVertical="@dimen/_16sdp"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".presentation.UI.MonthlySpendingSummary.MonthlySpendingSummaryFragment">
+    tools:context=".presentation.ui.MonthlySpendingSummary.MonthlySpendingSummaryFragment">
 
 
     <TextView

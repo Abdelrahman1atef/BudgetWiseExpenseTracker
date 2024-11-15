@@ -1,4 +1,4 @@
-package com.example.budgetwiseexpensetracker.presentation.UI.Home
+package com.example.budgetwiseexpensetracker.presentation.ui.home
 
 import android.os.Bundle
 import android.util.Log
@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.lifecycle.lifecycleScope
-import com.example.budgetwiseexpensetracker.base.ViewState
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.FragmentHomeBinding
 import com.example.budgetwiseexpensetracker.presentation.adapter.HomeRecyclerAdapter
@@ -17,20 +17,16 @@ import org.eazegraph.lib.models.PieModel
 import java.util.Calendar
 
 class HomeFragment : Fragment() {
-//    private val sharedViewModel: HomeViewModel by activityViewModels() //Fragment
-    private val viewModel by viewModels<HomeViewModel>()
+    private val viewModel by viewModel<HomeViewModel>()
     private lateinit var binding: FragmentHomeBinding
     private lateinit var homeRecyclerAdapter: HomeRecyclerAdapter
-    var fristTime =true
-    val now: Calendar = Calendar.getInstance()
-
-
+    private val now: Calendar = Calendar.getInstance()
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater)
         return binding.root
@@ -48,6 +44,8 @@ class HomeFragment : Fragment() {
         serObserver()
     }
 
+
+
     private fun initView() {
         setViewModel()
         setMonth()
@@ -64,32 +62,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setViewModel() {
-//        sharedViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
-
-//        private val sharedViewModel: SharedViewModel by activityViewModels() //Fragment
-
-//        private lateinit var sharedViewModel: SharedViewModel //Activity
-//        sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
-
-//        if(fristTime){
-//
-//            // Update RecyclerView
-//            (binding.fragmentMonthlySpendingSummary.rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(sharedViewModel.list)
-//            // Update Pie Chart
-//            updatePieChart(sharedViewModel.list)
-//            fristTime=false
-//        }
-//        if(fristTime){
-//
-//            // Update RecyclerView
-//            (binding.fragmentMonthlySpendingSummary.rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(sharedViewModel.list)
-//            // Update Pie Chart
-//            updatePieChart(sharedViewModel.list)
-//            fristTime=false
-//        }
         viewModel.getRecentTransaction()
     }
-
     private fun serObserver() {
 //        sharedViewModel.spendingData.observe(viewLifecycleOwner) { spendingData ->
 //            Log.e("FTAG", "2serObserver: $spendingData")
@@ -106,53 +80,51 @@ class HomeFragment : Fragment() {
 //            Log.e("FTAG", "2serObserver: $totalIncome")
 //            binding.tvIncomeTotal.text = "$${totalIncome}"
 //        }
-            lifecycleScope.launch {
-                viewModel.showRecentTransactionUseCase.collect {
-                    when(it){
-                        is ViewState.Loaded -> {
-                            Log.e("FTAG", "setObserver: ${it.data}")
-                        }
-                    }
-
-                }
+        lifecycleScope.launch {
+            viewModel.showRecentTransaction.collect { trasaction ->
+                        Log.e("FTAG", "setObserver: $trasaction")
+                // Update RecyclerView
+                (binding.fragmentMonthlySpendingSummary.rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(
+                    trasaction
+                )
+//            // Update Pie Chart
+                updatePieChart(trasaction)
             }
+        }
 
     }
+
     private fun updatePieChart(spendingData: MutableList<TransactionModel>) {
         binding.fragmentMonthlySpendingSummary.piechart.clearChart()  // Clear previous data to prevent overlap
-        if (spendingData != null) {
-            spendingData.forEach { item ->
-                binding.fragmentMonthlySpendingSummary.piechart.addPieSlice(
-                    item.amount?.let {
-                        PieModel(
-                            item.title,  // Title from the spending data
-                            it.toString().replace(),  // Amount converted to Float
-                            resources.getColor(item.itemColor, null)  // Color resource ID for each category
-                        )
-                    }
-                )
-            }
+        spendingData.forEach { item ->
+            binding.fragmentMonthlySpendingSummary.piechart.addPieSlice(
+                item.amount?.let {
+                    PieModel(
+                        item.title,  // Title from the spending data
+                        it.replace(),  // Amount converted to Float
+                        resources.getColor(
+                            item.itemColor,
+                            null
+                        )  // Color resource ID for each category
+                    )
+                }
+            )
         }
         binding.fragmentMonthlySpendingSummary.piechart.startAnimation()  // Start animation
     }
 
-    private fun setAdapter(){
-//        homeRecyclerAdapter=HomeRecyclerAdapter()
-//        binding.fragmentMonthlySpendingSummary.rvRecentSpending.apply {
-//            layoutManager = LinearLayoutManager(requireContext())
-//            adapter = homeRecyclerAdapter
-//            homeRecyclerAdapter.setData(sharedViewModel.list)
-//        }
+    private fun setAdapter() {
+        homeRecyclerAdapter=HomeRecyclerAdapter()
+        binding.fragmentMonthlySpendingSummary.rvRecentSpending.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = homeRecyclerAdapter
+            homeRecyclerAdapter.setData(viewModel.list)
+        }
     }
 
-    private fun String.replace( ): Float {
+    private fun String.replace(): Float {
         return this.replace("- $", "").toFloat()
     }
-
-
-
-
-
 
 
 }

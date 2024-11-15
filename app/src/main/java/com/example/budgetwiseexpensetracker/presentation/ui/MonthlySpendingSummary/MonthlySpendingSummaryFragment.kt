@@ -1,4 +1,4 @@
-package com.example.budgetwiseexpensetracker.presentation.UI.MonthlySpendingSummary
+package com.example.budgetwiseexpensetracker.presentation.ui.MonthlySpendingSummary
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

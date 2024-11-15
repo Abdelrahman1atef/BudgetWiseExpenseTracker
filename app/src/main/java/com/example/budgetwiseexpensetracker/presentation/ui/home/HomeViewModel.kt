@@ -1,65 +1,58 @@
-package com.example.budgetwiseexpensetracker.presentation.UI.Home
+package com.example.budgetwiseexpensetracker.presentation.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.budgetwiseexpensetracker.base.ViewState
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.domain.usecase.GetRecentTransactionUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    val getRecentTransaction: GetRecentTransactionUseCase
+   private val getRecentTransaction: GetRecentTransactionUseCase
 )
  : ViewModel() {
 
-     var _showRecentTransaction=
-         MutableStateFlow<ViewState<MutableList<TransactionModel>>>(ViewState.Empty())
-    val showRecentTransactionUseCase: MutableStateFlow<ViewState<MutableList<TransactionModel>>> =_showRecentTransaction
+    private val _showRecentTransaction = MutableStateFlow<MutableList<TransactionModel>>(mutableListOf())
+    val showRecentTransaction: MutableStateFlow<MutableList<TransactionModel>> = _showRecentTransaction
+
     fun getRecentTransaction(){
         viewModelScope.launch {
-            getRecentTransaction.getRecentTransactions().collect{
-                val state : ViewState<MutableList<TransactionModel>> =when (it) {
-                    it -> ViewState.Loaded(it)
-                    else -> ViewState.Empty()
-                }
-                _showRecentTransaction.value=state
+            getRecentTransaction.getRecentTransactions().collect { transactions ->
+                _showRecentTransaction.value = transactions.toMutableList()
             }
         }
     }
 
 
 
-    var list = mutableListOf<TransactionModel>()
-
-
-    private val _totalIncome: MutableLiveData<Int> = MutableLiveData<Int>()
-    val totalIncome: LiveData<Int> = _totalIncome
-    fun totalIncome() {
-        _totalIncome.value = list.sumOf { item -> item.amount?.replace()?.toInt() ?: 0 }
-    }
-
-    private val _totalExpense: MutableLiveData<Int> = MutableLiveData<Int>()
-    val totalExpense: LiveData<Int> = _totalExpense
-    fun totalSpending() {
-        _totalExpense.value = list.sumOf { item -> item.amount?.replace()?.toInt() ?: 0 }
-    }
-
-    private val _spendingData = MutableLiveData<MutableList<TransactionModel>>()
-    val spendingData: LiveData<MutableList<TransactionModel>> = _spendingData
-    fun updateSpendingData(position: String, newAmount: String, newTime: String) {
-        _spendingData.value = list?.map { item ->
-            if (item.title == position) item.apply {
-                amount = "- $" + (((amount)?.replace())?.plus((newAmount).toFloat())).toString()
-                currentTime = newTime
-            }
-            else item
-
-        }?.toMutableList()
-    }
-
+//    var list = mutableListOf<TransactionModel>()
+//
+//
+//    private val _totalIncome: MutableLiveData<Int> = MutableLiveData<Int>()
+//    val totalIncome: LiveData<Int> = _totalIncome
+//    fun totalIncome() {
+//        _totalIncome.value = list.sumOf { item -> item.amount?.replace()?.toInt() ?: 0 }
+//    }
+//
+//    private val _totalExpense: MutableLiveData<Int> = MutableLiveData<Int>()
+//    val totalExpense: LiveData<Int> = _totalExpense
+//    fun totalSpending() {
+//        _totalExpense.value = list.sumOf { item -> item.amount?.replace()?.toInt() ?: 0 }
+//    }
+//
+//    private val _spendingData = MutableLiveData<MutableList<TransactionModel>>()
+//    val spendingData: LiveData<MutableList<TransactionModel>> = _spendingData
+//    fun updateSpendingData(position: String, newAmount: String, newTime: String) {
+//        _spendingData.value = list?.map { item ->
+//            if (item.title == position) item.apply {
+//                amount = "- $" + (((amount)?.replace())?.plus((newAmount).toFloat())).toString()
+//                currentTime = newTime
+//            }
+//            else item
+//
+//        }?.toMutableList()
+//    }
+//
 //    init {
 //        // Initialize with default data
 //        list = mutableListOf(
@@ -89,10 +82,10 @@ class HomeViewModel(
 //        Log.e("init", "updateFromInit: ")
 //
 //    }
-
-    private fun String.replace(): Float {
-        return this.replace("- $", "").toFloat()
-    }
+//
+//    private fun String.replace(): Float {
+//        return this.replace("- $", "").toFloat()
+//    }
 
 
     /*

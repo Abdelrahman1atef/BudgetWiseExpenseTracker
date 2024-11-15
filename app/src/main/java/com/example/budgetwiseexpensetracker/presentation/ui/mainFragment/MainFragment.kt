@@ -1,4 +1,4 @@
-package com.example.budgetwiseexpensetracker.presentation.UI.mainFragment
+package com.example.budgetwiseexpensetracker.presentation.ui.mainFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

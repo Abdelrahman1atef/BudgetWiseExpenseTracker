@@ -7,16 +7,16 @@ import com.example.budgetwiseexpensetracker.domain.repository.Repository
 import com.example.budgetwiseexpensetracker.domain.repository.RepositoryImp
 import com.example.budgetwiseexpensetracker.domain.usecase.GetRecentTransactionUseCase
 import com.example.budgetwiseexpensetracker.domain.usecase.SaveTransactionUseCase
-import com.example.budgetwiseexpensetracker.presentation.UI.Expense.ExpenseViewModel
-import com.example.budgetwiseexpensetracker.presentation.UI.Home.HomeViewModel
+import com.example.budgetwiseexpensetracker.presentation.ui.Expense.ExpenseViewModel
+import com.example.budgetwiseexpensetracker.presentation.ui.home.HomeViewModel
 import com.example.myroomdatabase.Database.TransactionDatabase
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { HomeViewModel(get()) }
-    viewModel { ExpenseViewModel(get()) }
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::ExpenseViewModel)
 }
 val useCaseModule = module {
     factory { GetRecentTransactionUseCase(get()) }

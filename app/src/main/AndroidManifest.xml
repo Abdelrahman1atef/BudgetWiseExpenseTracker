@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".base.BudgetWiseApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,10 +14,7 @@
         android:theme="@style/Theme.BudgetWiseExpenseTracker"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.UI.Expense.ExpenseActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.UI.main.MainActivity"
+            android:name=".presentation.ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AnimatedSplash.MySplash">
             <intent-filter>
@@ -25,10 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".presentation.UI.Home.HomeActivity"
-            android:exported="true"
-            android:theme="@style/Theme.BudgetWiseExpenseTracker" />
     </application>
 
 </manifest>

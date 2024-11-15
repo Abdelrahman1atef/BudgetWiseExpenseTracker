@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.budgetwiseexpensetracker.presentation.UI.mainFragment.MainFragment"
+        android:name="com.example.budgetwiseexpensetracker.presentation.ui.mainFragment.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -20,13 +20,13 @@
 
     <fragment
         android:id="@+id/expenseFragment"
-        android:name="com.example.budgetwiseexpensetracker.presentation.UI.Expense.ExpenseFragment"
+        android:name="com.example.budgetwiseexpensetracker.presentation.ui.Expense.ExpenseFragment"
         android:label="ExpenseFragment"
         tools:layout="@layout/fragment_expense"
         />
     <fragment
         android:id="@+id/incomeFragment"
-        android:name="com.example.budgetwiseexpensetracker.presentation.UI.Income.IncomeFragment"
+        android:name="com.example.budgetwiseexpensetracker.presentation.ui.Income.IncomeFragment"
         android:label="IncomeFragment"
         tools:layout="@layout/fragment_income"/>
 
