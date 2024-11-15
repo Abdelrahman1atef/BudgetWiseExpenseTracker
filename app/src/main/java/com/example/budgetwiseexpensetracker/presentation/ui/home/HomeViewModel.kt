@@ -4,25 +4,62 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.domain.usecase.GetRecentTransactionUseCase
+import com.example.budgetwiseexpensetracker.domain.usecase.GetTotalBalanceUseCase
+import com.example.budgetwiseexpensetracker.domain.usecase.GetTotalExpenseUseCase
+import com.example.budgetwiseexpensetracker.domain.usecase.GetTotalIncomeUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-   private val getRecentTransaction: GetRecentTransactionUseCase
-)
- : ViewModel() {
+    private val getRecentTransactionUseCase: GetRecentTransactionUseCase,
+    private val getTotalBalanceUseCase: GetTotalBalanceUseCase,
+    private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
+    private val getTotalIncomeUseCase: GetTotalIncomeUseCase
+) : ViewModel() {
 
-    private val _showRecentTransaction = MutableStateFlow<MutableList<TransactionModel>>(mutableListOf())
-    val showRecentTransaction: MutableStateFlow<MutableList<TransactionModel>> = _showRecentTransaction
+    private val _showRecentTransaction =
+        MutableStateFlow<MutableList<TransactionModel>>(mutableListOf())
+    val showRecentTransaction: MutableStateFlow<MutableList<TransactionModel>> =
+        _showRecentTransaction
 
-    fun getRecentTransaction(){
+    fun getRecentTransaction() {
         viewModelScope.launch {
-            getRecentTransaction.getRecentTransactions().collect { transactions ->
+            getRecentTransactionUseCase.getRecentTransactions().collect { transactions ->
                 _showRecentTransaction.value = transactions.toMutableList()
             }
         }
     }
 
+    private val _showTotalBalance = MutableStateFlow(0.0)
+    val showTotalBalance: MutableStateFlow<Double> = _showTotalBalance
+    fun getTotalBalance() {
+        viewModelScope.launch {
+            getTotalBalanceUseCase.getTotalBalance().collect { totalBalance ->
+                _showTotalBalance.value = totalBalance
+            }
+        }
+    }
+
+
+    private val _showTotalExpense = MutableStateFlow(0.0)
+    val showTotalExpense: MutableStateFlow<Double> = _showTotalExpense
+    fun getTotalExpense() {
+        viewModelScope.launch {
+            getTotalExpenseUseCase.getTotalExpense().collect { totalExpense ->
+                _showTotalExpense.value = totalExpense
+            }
+        }
+    }
+
+    private val _showTotalIncome = MutableStateFlow(0.0)
+    val showTotalIncome: MutableStateFlow<Double> = _showTotalIncome
+    fun getTotalIncome() {
+        viewModelScope.launch {
+            getTotalIncomeUseCase.getTotalIncome().collect { totalIncome ->
+                _showTotalIncome.value = totalIncome
+            }
+        }
+    }
 
 
 //    var list = mutableListOf<TransactionModel>()

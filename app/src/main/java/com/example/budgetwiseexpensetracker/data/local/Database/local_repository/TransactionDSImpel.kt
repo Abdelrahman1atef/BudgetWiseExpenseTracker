@@ -28,7 +28,7 @@ class TransactionDSImpel(private val dao: TransactionDao) : TransactionDS {
     }
 
 override suspend fun getRecentTransactions(): Flow<MutableList<TransactionModel>> =
-    dao.getAllTransactions().map { transactions ->
+    dao.getRecentTransactions().map { transactions ->
         transactions.map { entity ->
             TransactionModel(
                 title = entity.title,
@@ -41,4 +41,38 @@ override suspend fun getRecentTransactions(): Flow<MutableList<TransactionModel>
             )
         }.toMutableList()
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun getTotalIncome(): Flow<Double> =
+        dao.getTotalIncome()
+
+    override suspend fun getTotalExpense(): Flow<Double> =
+        dao.getTotalExpense()
+
+    override suspend fun getTotalBalance(): Flow<Double> =
+        dao.getTotalBalance()
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -16,7 +16,7 @@ private var transactionModels: MutableList<TransactionModel> = emptyList<Transac
             binding.tvTitle.text = transactionModel.title
             binding.tvSubtitle.text = transactionModel.subtitle
             binding.ivIcon.setImageResource(transactionModel.icon)
-            binding.tvAmount.text = transactionModel.amount
+            binding.tvAmount.text = "- $${transactionModel.amount.toString()}"
             binding.tvTime.text = transactionModel.currentTime
         }
     }

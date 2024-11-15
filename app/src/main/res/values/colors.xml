@@ -14,4 +14,6 @@
     <color name="Subscription">#7F3DFF</color>
     <color name="Food">#FD3C4A</color>
     <color name="Other">#0276AD</color>
+    <color name="Salary">#00A86B</color>
+    <color name="Passive_Income">#0D0E0F</color>
 </resources>

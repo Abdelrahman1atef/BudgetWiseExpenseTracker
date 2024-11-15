@@ -26,7 +26,7 @@
         />
     <fragment
         android:id="@+id/incomeFragment"
-        android:name="com.example.budgetwiseexpensetracker.presentation.ui.Income.IncomeFragment"
+        android:name="com.example.budgetwiseexpensetracker.presentation.ui.income.IncomeFragment"
         android:label="IncomeFragment"
         tools:layout="@layout/fragment_income"/>
 

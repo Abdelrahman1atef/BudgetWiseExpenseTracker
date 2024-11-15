@@ -10,7 +10,6 @@
     </string-array>
     <string-array name="IncomeCategories">
         <item>Category</item>
-
         <item>Salary</item>
         <item>Passive Income</item>
     </string-array>

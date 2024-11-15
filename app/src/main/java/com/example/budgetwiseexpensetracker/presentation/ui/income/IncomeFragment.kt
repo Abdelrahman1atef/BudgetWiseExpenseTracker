@@ -1,4 +1,4 @@
-package com.example.budgetwiseexpensetracker.presentation.ui.Income
+package com.example.budgetwiseexpensetracker.presentation.ui.income
 
 import android.content.Context
 import android.os.Bundle
@@ -12,27 +12,28 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.budgetwiseexpensetracker.R
+import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.FragmentIncomeBinding
-import com.example.budgetwiseexpensetracker.presentation.ui.home.HomeViewModel
 import com.example.budgetwiseexpensetracker.presentation.adapter.CustomSpinnerAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class IncomeFragment : Fragment() {
     private lateinit var binding: FragmentIncomeBinding
-    private val sharedViewModel: HomeViewModel by activityViewModels()
-    private var SelectedCategory: String? = ""
+    private val viewModel by viewModel<IncomeViewModel>()
+    private var selectedCategory: String? = ""
     val formattedTime =
         SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Calendar.getInstance().time)
-    override fun onCreateView(
 
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentIncomeBinding.inflate(layoutInflater)
         return binding.root
@@ -48,24 +49,53 @@ class IncomeFragment : Fragment() {
         setBackArrowClick()
         editTextWatcher()
         setspinnerAdapter()
+        saveData()
+
+        binding.root.setOnTouchListener { _, _ ->
+            hideKeyboard()
+            false
+        }
+    }
+
+    private fun saveData() {
         binding.btnContinue.setOnClickListener {
             if (binding.etAmount.text.toString() == "0") {
                 Toast.makeText(requireContext(), "Enter Amount", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (SelectedCategory.toString() == "") {
+            if (selectedCategory.toString() == "") {
                 Toast.makeText(requireContext(), "Select Category", Toast.LENGTH_SHORT).show()
             }
-            Log.e("etAmount", "Amount: ${binding.etAmount.text}")
-            Log.e("spinner2", "Selected item: $SelectedCategory")
-//            Log.e("Time", "time: $formattedTime")
-//            sharedViewModel.
-            sharedViewModel.totalIncome()
+            lifecycleScope.launchWhenStarted {
+                viewModel.saveTransaction(
+                    TransactionModel(
+                        title = selectedCategory.toString(),
+                        subtitle = "",
+                        icon = setIcon(),
+                        amount = binding.etAmount.text.toString().toDouble(),
+                        currentTime = formattedTime,
+                        itemColor = setItemColor(),
+                        type = "Income"
+                    )
+                )
+            }
             findNavController().navigateUp()
         }
-        binding.root.setOnTouchListener { _, _ ->
-            hideKeyboard()
-            false
+    }
+
+    private fun setItemColor(): Int {
+        when (selectedCategory) {
+            "Salary" -> return R.color.Salary
+            "Passive Income" -> return R.color.Passive_Income
+            else -> return R.color.Salary
+        }
+    }
+
+    private fun setIcon(): Int {
+        when (selectedCategory) {
+            "Salary" -> return R.drawable.salary
+            "Other" -> return R.drawable.passive_income
+            else -> return R.drawable.salary
         }
     }
 
@@ -125,16 +155,17 @@ class IncomeFragment : Fragment() {
             ) {
                 if (position != customSpinnerAdapter.hidingItemIndex) {
                     customSpinnerAdapter.selectedPosition = position
-                    SelectedCategory = when {
+                    selectedCategory = when {
                         customSpinnerAdapter.selectedPosition <= 0 -> categories[customSpinnerAdapter.selectedPosition + 1]
                         customSpinnerAdapter.selectedPosition >= categories.size -> ""
                         else -> categories[customSpinnerAdapter.selectedPosition]
                     }
                     Log.e("spinner1", "Selected item: ${categories[position]}")
-                    Log.e("spinner2", "Selected item: $SelectedCategory")
+                    Log.e("spinner2", "Selected item: $selectedCategory")
 
                 }
             }
+
             override fun onNothingSelected(parent: AdapterView<*>) {
                 Log.e("spinner", "No item selected")
             }

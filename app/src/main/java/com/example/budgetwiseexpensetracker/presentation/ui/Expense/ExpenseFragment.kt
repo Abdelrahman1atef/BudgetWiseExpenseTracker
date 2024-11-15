@@ -33,7 +33,7 @@ class ExpenseFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding= FragmentExpenseBinding.inflate(layoutInflater)
         return binding.root
@@ -64,26 +64,16 @@ class ExpenseFragment : Fragment() {
             if (SelectedCategory.toString() == "") {
                 Toast.makeText(requireContext(), "Select Category", Toast.LENGTH_SHORT).show()
             }
-//            Log.e("etAmount", "Amount: ${binding.etAmount.text}")
-//            Log.e("spinner2", "Selected item: $SelectedCategory")
-//            Log.e("Time", "time: $formattedTime")
-//            SelectedCategory?.let { it1 ->
-//                sharedViewModel.updateSpendingData(
-//                    it1,
-//                    binding.etAmount.text.toString(),
-//                    formattedTime
-//                )
-//            }
-//            sharedViewModel.totalSpending()
-
             lifecycleScope.launchWhenStarted {
                 viewModel.saveTransaction(TransactionModel(
                     title = SelectedCategory.toString(),
                     subtitle = "",
-                    icon = setIcon(),                                 // R.drawable.shopping,
-                    amount = "- $"+binding.etAmount.text.toString(),
+                    icon = setIcon(),
+                    amount = binding.etAmount.text.toString().toDouble(),
+//                    amount = "- $"+binding.etAmount.text.toString(),
                     currentTime = formattedTime,
-                    itemColor =  setItemColor()                       //R.color.Shopping
+                    itemColor =  setItemColor()     ,
+                    type = "Expense"
                 ))
             }
             findNavController().navigateUp()
@@ -96,7 +86,7 @@ class ExpenseFragment : Fragment() {
             "Subscription"->return R.color.Subscription
             "Food"->return R.color.Food
             "Other"->return R.color.Other
-            else->return R.color.Shopping
+            else->return R.color.Other
         }
     }
 
@@ -106,7 +96,7 @@ class ExpenseFragment : Fragment() {
             "Subscription" -> return R.drawable.subscription
             "Food" -> return R.drawable.food
             "Other" -> return R.drawable.other
-            else -> return R.drawable.shopping
+            else -> return R.drawable.other
         }
     }
 

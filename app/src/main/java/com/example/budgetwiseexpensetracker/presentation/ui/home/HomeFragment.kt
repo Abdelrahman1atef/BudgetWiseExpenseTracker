@@ -2,6 +2,7 @@ package com.example.budgetwiseexpensetracker.presentation.ui.home
 
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,10 +46,44 @@ class HomeFragment : Fragment() {
     }
 
 
-
     private fun initView() {
         setViewModel()
         setMonth()
+        setFlexableText()
+    }
+
+    private fun setFlexableText() {
+        Log.e("TAG", "setFlexableText: ${binding.tvExpenseTotal.text.length}")
+        when (binding.tvExpenseTotal.text.length) {
+            in 0..4 -> {
+                binding.tvExpenseTotal.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimension(com.intuit.ssp.R.dimen._18ssp)
+                )
+            }
+
+            in 5..6 -> {
+                binding.tvExpenseTotal.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimension(com.intuit.ssp.R.dimen._16ssp)
+                )
+            }
+        }
+        when (binding.tvIncomeTotal.text.length) {
+            in 0..4 -> {
+                binding.tvIncomeTotal.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimension(com.intuit.ssp.R.dimen._18ssp)
+                )
+            }
+
+            in 5..6 -> {
+                binding.tvIncomeTotal.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimension(com.intuit.ssp.R.dimen._16ssp)
+                )
+            }
+        }
     }
 
     private fun setMonth() {
@@ -63,32 +98,36 @@ class HomeFragment : Fragment() {
 
     private fun setViewModel() {
         viewModel.getRecentTransaction()
+        viewModel.getTotalBalance()
+        viewModel.getTotalExpense()
+        viewModel.getTotalIncome()
+
     }
+
     private fun serObserver() {
-//        sharedViewModel.spendingData.observe(viewLifecycleOwner) { spendingData ->
-//            Log.e("FTAG", "2serObserver: $spendingData")
-//            // Update RecyclerView
-//            (binding.fragmentMonthlySpendingSummary.rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(spendingData)
-//            // Update Pie Chart
-//            updatePieChart(spendingData)
-//        }
-//        sharedViewModel.totalExpense.observe(viewLifecycleOwner) { totalExpense ->
-//            Log.e("FTAG", "2serObserver: $totalExpense")
-//            binding.tvExpenseTotal.text = "$${totalExpense}"
-//        }
-//        sharedViewModel.totalIncome.observe(viewLifecycleOwner) { totalIncome ->
-//            Log.e("FTAG", "2serObserver: $totalIncome")
-//            binding.tvIncomeTotal.text = "$${totalIncome}"
-//        }
         lifecycleScope.launch {
             viewModel.showRecentTransaction.collect { trasaction ->
-                        Log.e("FTAG", "setObserver: $trasaction")
-                // Update RecyclerView
                 (binding.fragmentMonthlySpendingSummary.rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(
                     trasaction
                 )
-//            // Update Pie Chart
                 updatePieChart(trasaction)
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.showTotalBalance.collect { totalBalance ->
+                binding.tvTotalBalance.text = "$${totalBalance}"
+            }
+
+        }
+        lifecycleScope.launch {
+            viewModel.showTotalExpense.collect { totalExpense ->
+                binding.tvExpenseTotal.text = "$${totalExpense}"
+            }
+
+        }
+        lifecycleScope.launch {
+            viewModel.showTotalIncome.collect { totalIncome ->
+                binding.tvIncomeTotal.text = "$${totalIncome}"
             }
         }
 
@@ -101,7 +140,7 @@ class HomeFragment : Fragment() {
                 item.amount?.let {
                     PieModel(
                         item.title,  // Title from the spending data
-                        it.replace(),  // Amount converted to Float
+                        it.toFloat(),  // Amount converted to Float
                         resources.getColor(
                             item.itemColor,
                             null
@@ -114,7 +153,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        homeRecyclerAdapter=HomeRecyclerAdapter()
+        homeRecyclerAdapter = HomeRecyclerAdapter()
         binding.fragmentMonthlySpendingSummary.rvRecentSpending.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = homeRecyclerAdapter
