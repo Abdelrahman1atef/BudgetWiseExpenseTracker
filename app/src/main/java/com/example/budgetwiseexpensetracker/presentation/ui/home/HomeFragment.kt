@@ -118,7 +118,7 @@ class HomeFragment : Fragment() {
         binding.fragmentMonthlySpendingSummary.rvRecentSpending.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = homeRecyclerAdapter
-            homeRecyclerAdapter.setData(viewModel.list)
+
         }
     }
 
