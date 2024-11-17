@@ -9,6 +9,7 @@ import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.FragmentExpenseListBinding
 import com.example.budgetwiseexpensetracker.databinding.MonthlySpendingItemBinding
+import com.example.budgetwiseexpensetracker.databinding.SectionHeaderBinding
 import com.example.budgetwiseexpensetracker.utils.isLastThreeWeeks
 import com.example.budgetwiseexpensetracker.utils.isLastWeek
 import com.example.budgetwiseexpensetracker.utils.isToday
@@ -43,7 +44,7 @@ class ExListRecyclerAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
     }
 
-    inner class HeaderViewHolder(val binding: FragmentExpenseListBinding) : ViewHolder(binding.root) {
+    inner class HeaderViewHolder(val binding: SectionHeaderBinding) : ViewHolder(binding.root) {
         fun onBind(headerText: String) {
             binding.tvSectionHeader.text = headerText
         }
@@ -53,7 +54,7 @@ class ExListRecyclerAdapter : RecyclerView.Adapter<ViewHolder>() {
         return when (viewType) {
             TYPE_HEADER -> {
                 val binding =
-                    FragmentExpenseListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    SectionHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 HeaderViewHolder(binding)
             }
 
@@ -82,8 +83,7 @@ class ExListRecyclerAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        // Check if it's a header or a transaction item
-        return if (position % 2 == 0) TYPE_HEADER else TYPE_TRANSACTION // Simple logic for this example
+        return if (transactionModels[position].header != null) TYPE_HEADER else TYPE_TRANSACTION
     }
 
     fun setData(newData: MutableList<TransactionModel>) {
@@ -92,10 +92,6 @@ class ExListRecyclerAdapter : RecyclerView.Adapter<ViewHolder>() {
         val lastWeekTransactions = mutableListOf<TransactionModel>()
         val lastThreeWeeksTransactions = mutableListOf<TransactionModel>()
 
-        Log.e("TestDATA","""
-            ToDay: $todayTransactions
-            yesterday: $yesterdayTransactions
-        """.trimIndent())
 
         // Sort transactions into categories
         for (transaction in newData) {
@@ -127,6 +123,10 @@ class ExListRecyclerAdapter : RecyclerView.Adapter<ViewHolder>() {
             categorizedTransactions.add(TransactionModel(header = "Last 3 Weeks"))
             categorizedTransactions.addAll(lastThreeWeeksTransactions)
         }
+        Log.e("TestDATA","""
+            ToDay: $todayTransactions
+            yesterday: $yesterdayTransactions
+        """.trimIndent())
 
         // Set the filtered data
         transactionModels = categorizedTransactions
