@@ -5,12 +5,14 @@ import com.example.budgetwiseexpensetracker.data.local.Database.interfaces.Trans
 import com.example.budgetwiseexpensetracker.data.local.Database.local_repository.TransactionDSImpel
 import com.example.budgetwiseexpensetracker.domain.repository.Repository
 import com.example.budgetwiseexpensetracker.domain.repository.RepositoryImp
+import com.example.budgetwiseexpensetracker.domain.usecase.GetAllTransactionsUseCase
 import com.example.budgetwiseexpensetracker.domain.usecase.GetRecentTransactionUseCase
 import com.example.budgetwiseexpensetracker.domain.usecase.GetTotalBalanceUseCase
 import com.example.budgetwiseexpensetracker.domain.usecase.GetTotalExpenseUseCase
 import com.example.budgetwiseexpensetracker.domain.usecase.GetTotalIncomeUseCase
 import com.example.budgetwiseexpensetracker.domain.usecase.SaveTransactionUseCase
-import com.example.budgetwiseexpensetracker.presentation.ui.Expense.ExpenseViewModel
+import com.example.budgetwiseexpensetracker.presentation.ui.expense.ExpenseViewModel
+import com.example.budgetwiseexpensetracker.presentation.ui.expenseList.ExpenseListViewModel
 import com.example.budgetwiseexpensetracker.presentation.ui.home.HomeViewModel
 import com.example.budgetwiseexpensetracker.presentation.ui.income.IncomeViewModel
 import com.example.myroomdatabase.Database.TransactionDatabase
@@ -22,8 +24,10 @@ val viewModelModule = module {
     viewModel{HomeViewModel(get(),get(),get(),get())}
     viewModel{ExpenseViewModel(get())}
     viewModel{ IncomeViewModel(get()) }
+    viewModel { ExpenseListViewModel(get()) }
 }
 val useCaseModule = module {
+    factory { GetAllTransactionsUseCase(get()) }
     factory { GetRecentTransactionUseCase(get()) }
     factory { SaveTransactionUseCase(get()) }
     factory { GetTotalBalanceUseCase(get()) }

@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/expenseFragment"
-        android:name="com.example.budgetwiseexpensetracker.presentation.ui.Expense.ExpenseFragment"
+        android:name="com.example.budgetwiseexpensetracker.presentation.ui.expense.ExpenseFragment"
         android:label="ExpenseFragment"
         tools:layout="@layout/fragment_expense"
         />

@@ -1,4 +1,4 @@
-package com.example.budgetwiseexpensetracker.presentation.ui.Expense
+package com.example.budgetwiseexpensetracker.presentation.ui.expense
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

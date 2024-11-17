@@ -18,6 +18,7 @@ import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.FragmentIncomeBinding
 import com.example.budgetwiseexpensetracker.presentation.adapter.CustomSpinnerAdapter
+import com.example.budgetwiseexpensetracker.utils.DateUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -27,8 +28,6 @@ class IncomeFragment : Fragment() {
     private lateinit var binding: FragmentIncomeBinding
     private val viewModel by viewModel<IncomeViewModel>()
     private var selectedCategory: String? = ""
-    val formattedTime =
-        SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Calendar.getInstance().time)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +72,10 @@ class IncomeFragment : Fragment() {
                         subtitle = "",
                         icon = setIcon(),
                         amount = binding.etAmount.text.toString().toDouble(),
-                        currentTime = formattedTime,
+                        currentTime = DateUtils.getCurrentTime(),
+                        transactionDateD = DateUtils.getCurrentDayMonthYear().first,
+                        transactionDateM = DateUtils.getCurrentDayMonthYear().second,
+                        transactionDateY = DateUtils.getCurrentDayMonthYear().third,
                         itemColor = setItemColor(),
                         type = "Income"
                     )
@@ -94,7 +96,7 @@ class IncomeFragment : Fragment() {
     private fun setIcon(): Int {
         when (selectedCategory) {
             "Salary" -> return R.drawable.salary
-            "Other" -> return R.drawable.passive_income
+            "Passive Income" -> return R.drawable.passive_income
             else -> return R.drawable.salary
         }
     }

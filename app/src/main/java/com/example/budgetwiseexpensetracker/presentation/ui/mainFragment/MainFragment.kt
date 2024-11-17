@@ -1,6 +1,7 @@
 package com.example.budgetwiseexpensetracker.presentation.ui.mainFragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,9 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.databinding.FragmentMainBinding
 
@@ -74,7 +77,18 @@ class MainFragment : Fragment() {
 
     private fun initView() {
         fabMainPage()
+        setNavController()
 
+    }
+
+    private fun setNavController() {
+        val navController = childFragmentManager.findFragmentById(R.id.fragmentContainerView3)
+            ?.findNavController()?: return
+        if (navController != null) {
+            binding.bottomNavigationMainPage.setupWithNavController(navController)
+        } else {
+            Log.e("MainFragment", "NavController for child fragments is null")
+        }
     }
 
     private fun fabMainPage() {

@@ -1,4 +1,4 @@
-package com.example.budgetwiseexpensetracker.presentation.ui.Expense
+package com.example.budgetwiseexpensetracker.presentation.ui.expense
 
 import android.content.Context
 import android.os.Bundle
@@ -19,6 +19,7 @@ import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.FragmentExpenseBinding
 import com.example.budgetwiseexpensetracker.presentation.adapter.CustomSpinnerAdapter
+import com.example.budgetwiseexpensetracker.utils.DateUtils
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -28,8 +29,6 @@ class ExpenseFragment : Fragment() {
     private lateinit var binding: FragmentExpenseBinding
     private val viewModel by viewModel<ExpenseViewModel>()
     private var SelectedCategory: String? = ""
-    val formattedTime =
-        SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Calendar.getInstance().time)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,8 +69,10 @@ class ExpenseFragment : Fragment() {
                     subtitle = "",
                     icon = setIcon(),
                     amount = binding.etAmount.text.toString().toDouble(),
-//                    amount = "- $"+binding.etAmount.text.toString(),
-                    currentTime = formattedTime,
+                    currentTime = DateUtils.getCurrentTime(),
+                    transactionDateD = DateUtils.getCurrentDayMonthYear().first,
+                    transactionDateM = DateUtils.getCurrentDayMonthYear().second,
+                    transactionDateY = DateUtils.getCurrentDayMonthYear().third,
                     itemColor =  setItemColor()     ,
                     type = "Expense"
                 ))

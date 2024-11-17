@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.FragmentHomeBinding
 import com.example.budgetwiseexpensetracker.presentation.adapter.HomeRecyclerAdapter
+import com.example.budgetwiseexpensetracker.utils.DateUtils
 import kotlinx.coroutines.launch
 import org.eazegraph.lib.models.PieModel
 import java.util.Calendar
@@ -21,7 +22,7 @@ class HomeFragment : Fragment() {
     private val viewModel by viewModel<HomeViewModel>()
     private lateinit var binding: FragmentHomeBinding
     private lateinit var homeRecyclerAdapter: HomeRecyclerAdapter
-    private val now: Calendar = Calendar.getInstance()
+//    private val now: Calendar = Calendar.getInstance()
 
 
     override fun onCreateView(
@@ -40,60 +41,11 @@ class HomeFragment : Fragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        serObserver()
-    }
-
-
     private fun initView() {
         setViewModel()
+        setObserver()
         setMonth()
         setFlexableText()
-    }
-
-    private fun setFlexableText() {
-        Log.e("TAG", "setFlexableText: ${binding.tvExpenseTotal.text.length}")
-        when (binding.tvExpenseTotal.text.length) {
-            in 0..4 -> {
-                binding.tvExpenseTotal.setTextSize(
-                    TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimension(com.intuit.ssp.R.dimen._18ssp)
-                )
-            }
-
-            in 5..6 -> {
-                binding.tvExpenseTotal.setTextSize(
-                    TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimension(com.intuit.ssp.R.dimen._16ssp)
-                )
-            }
-        }
-        when (binding.tvIncomeTotal.text.length) {
-            in 0..4 -> {
-                binding.tvIncomeTotal.setTextSize(
-                    TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimension(com.intuit.ssp.R.dimen._18ssp)
-                )
-            }
-
-            in 5..6 -> {
-                binding.tvIncomeTotal.setTextSize(
-                    TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimension(com.intuit.ssp.R.dimen._16ssp)
-                )
-            }
-        }
-    }
-
-    private fun setMonth() {
-        val monthName = arrayOf(
-            "January", "February", "March", "April", "May", "June", "July",
-            "August", "September", "October", "November",
-            "December"
-        )
-        val month = monthName[now.get(Calendar.MONTH)]
-        binding.tvMonth.text = month
     }
 
     private fun setViewModel() {
@@ -101,10 +53,9 @@ class HomeFragment : Fragment() {
         viewModel.getTotalBalance()
         viewModel.getTotalExpense()
         viewModel.getTotalIncome()
-
     }
 
-    private fun serObserver() {
+    private fun setObserver() {
         lifecycleScope.launch {
             viewModel.showRecentTransaction.collect { trasaction ->
                 (binding.fragmentMonthlySpendingSummary.rvRecentSpending.adapter as? HomeRecyclerAdapter)?.setData(
@@ -165,5 +116,41 @@ class HomeFragment : Fragment() {
         return this.replace("- $", "").toFloat()
     }
 
+    private fun setFlexableText() {
+        Log.e("TAG", "setFlexableText: ${binding.tvExpenseTotal.text.length}")
+        when (binding.tvExpenseTotal.text.length) {
+            in 0..4 -> {
+                binding.tvExpenseTotal.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimension(com.intuit.ssp.R.dimen._18ssp)
+                )
+            }
 
+            in 5..6 -> {
+                binding.tvExpenseTotal.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimension(com.intuit.ssp.R.dimen._16ssp)
+                )
+            }
+        }
+        when (binding.tvIncomeTotal.text.length) {
+            in 0..4 -> {
+                binding.tvIncomeTotal.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimension(com.intuit.ssp.R.dimen._18ssp)
+                )
+            }
+
+            in 5..6 -> {
+                binding.tvIncomeTotal.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimension(com.intuit.ssp.R.dimen._16ssp)
+                )
+            }
+        }
+    }
+
+    private fun setMonth() {
+        binding.tvMonth.text = DateUtils.getMonth()
+    }
 }

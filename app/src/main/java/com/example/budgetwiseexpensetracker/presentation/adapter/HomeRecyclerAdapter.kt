@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.MonthlySpendingItemBinding
 
 class HomeRecyclerAdapter : RecyclerView.Adapter<HomeRecyclerAdapter.HomeViewHolder>() {
-//    private var model: ArrayList<Model> = ArrayList()
 private var transactionModels: MutableList<TransactionModel> = emptyList<TransactionModel>().toMutableList()
 
     inner class HomeViewHolder(val binding: MonthlySpendingItemBinding) : ViewHolder(binding.root) {
@@ -16,8 +16,18 @@ private var transactionModels: MutableList<TransactionModel> = emptyList<Transac
             binding.tvTitle.text = transactionModel.title
             binding.tvSubtitle.text = transactionModel.subtitle
             binding.ivIcon.setImageResource(transactionModel.icon)
-            binding.tvAmount.text = "- $${transactionModel.amount.toString()}"
             binding.tvTime.text = transactionModel.currentTime
+            when(transactionModel.type){
+                "Income"-> {
+                    binding.tvAmount.setTextColor(binding.root.context.getColor(R.color.sec_green))
+                    binding.tvAmount.text = "+ $${transactionModel.amount.toString()}"
+                }
+                "Expense"-> {
+                    binding.tvAmount.setTextColor(binding.root.context.getColor(R.color.main_red))
+                    binding.tvAmount.text = "- $${transactionModel.amount.toString()}"
+                }
+            }
+
         }
     }
 

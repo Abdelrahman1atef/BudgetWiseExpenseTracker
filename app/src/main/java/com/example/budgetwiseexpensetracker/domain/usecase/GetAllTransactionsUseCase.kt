@@ -1,0 +1,10 @@
+package com.example.budgetwiseexpensetracker.domain.usecase
+
+import com.example.budgetwiseexpensetracker.data.model.TransactionModel
+import com.example.budgetwiseexpensetracker.domain.repository.Repository
+import kotlinx.coroutines.flow.Flow
+
+class GetAllTransactionsUseCase(val repository: Repository) {
+    suspend fun getAllTransactions(): Flow<MutableList<TransactionModel>> =
+        repository.getAllTransactions()
+}

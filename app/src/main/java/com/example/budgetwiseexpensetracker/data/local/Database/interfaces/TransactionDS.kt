@@ -9,5 +9,6 @@ interface TransactionDS {
     suspend fun getTotalIncome(): Flow<Double>
     suspend fun getTotalExpense(): Flow<Double>
     suspend fun getTotalBalance(): Flow<Double>
+    suspend fun getAllTransactions(): Flow<MutableList<TransactionModel>>
 
 }

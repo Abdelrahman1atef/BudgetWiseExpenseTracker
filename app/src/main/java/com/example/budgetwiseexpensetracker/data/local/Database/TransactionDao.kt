@@ -21,8 +21,8 @@ interface TransactionDao {
 
     @Query(
         """
-    SELECT id, title, subtitle, icon, SUM(amount) AS amount, MAX(currentTime) AS currentTime, 
-           itemColor, type 
+    SELECT id, title, subtitle, icon, SUM(amount) AS amount, MAX(currentTime) AS currentTime,
+            transactionDateD,transactionDateM,transactionDateY,itemColor, type 
     FROM `transaction`
     WHERE type='Expense'
     GROUP BY title

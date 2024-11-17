@@ -17,6 +17,9 @@ class RepositoryImp(private val transactionDS: TransactionDS):Repository {
     override suspend fun getTotalExpense(): Flow<Double> =
         transactionDS.getTotalExpense()
 
+    override suspend fun getAllTransactions(): Flow<MutableList<TransactionModel>> =
+        transactionDS.getAllTransactions()
+
     override suspend fun getTotalIncome(): Flow<Double> =
         transactionDS.getTotalIncome()
 
