@@ -39,6 +39,7 @@ class ExpenseListFragment : Fragment() {
         setViewModel()
         setObserver()
         setView()
+
     }
 
     private fun setView() {

@@ -61,4 +61,30 @@ interface TransactionDao {
 
     @Query("SELECT * FROM `transaction` ORDER BY currentTime ASC")
     fun getTransactionByOldestTime(): Flow<MutableList<Transaction>>
+
+//    @Query("""
+//        INSERT INTO "transaction"VALUES(15, 'Shopping', '', 2131230978, 100.0, '01:55 AM', 18, 11, 2024, 2131099652, 'Expense');
+//
+//    """)
+//    fun setData():Flow<MutableList<Transaction>>
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

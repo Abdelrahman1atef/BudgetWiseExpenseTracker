@@ -1,17 +1,16 @@
 package com.example.budgetwiseexpensetracker.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
-import com.example.budgetwiseexpensetracker.databinding.FragmentExpenseListBinding
 import com.example.budgetwiseexpensetracker.databinding.MonthlySpendingItemBinding
 import com.example.budgetwiseexpensetracker.databinding.SectionHeaderBinding
-import com.example.budgetwiseexpensetracker.utils.isLastThreeWeeks
 import com.example.budgetwiseexpensetracker.utils.isLastWeek
+import com.example.budgetwiseexpensetracker.utils.isRestOfMonth
+import com.example.budgetwiseexpensetracker.utils.isThisWeek
 import com.example.budgetwiseexpensetracker.utils.isToday
 import com.example.budgetwiseexpensetracker.utils.isYesterday
 
@@ -87,50 +86,29 @@ class ExListRecyclerAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     fun setData(newData: MutableList<TransactionModel>) {
-        val todayTransactions = mutableListOf<TransactionModel>()
-        val yesterdayTransactions = mutableListOf<TransactionModel>()
-        val lastWeekTransactions = mutableListOf<TransactionModel>()
-        val lastThreeWeeksTransactions = mutableListOf<TransactionModel>()
+        val categorizedTransactions = mutableListOf<TransactionModel>()
 
+        // Group transactions by category
+        val categories = mapOf(
+            "Today" to newData.filter { isToday(it) },
+            "Yesterday" to newData.filter { isYesterday(it) },
+            "This Week" to newData.filter { isThisWeek(it) },
+            "Last Week" to newData.filter { isLastWeek(it) },
+            "Rest of Month" to newData.filter { isRestOfMonth(it) }
+        )
 
-        // Sort transactions into categories
-        for (transaction in newData) {
-            when {
-                isToday(transaction) -> todayTransactions.add(transaction)
-                isYesterday(transaction) -> yesterdayTransactions.add(transaction)
-                isLastWeek(transaction) -> lastWeekTransactions.add(transaction)
-                isLastThreeWeeks(transaction) -> lastThreeWeeksTransactions.add(transaction)
+        // Add headers and their corresponding transactions
+        for ((header, transactions) in categories) {
+            if (transactions.isNotEmpty()) {
+                categorizedTransactions.add(TransactionModel(header = header))
+                categorizedTransactions.addAll(transactions)
             }
         }
 
-        // Now you can combine the categories in a desired order
-        val categorizedTransactions = mutableListOf<TransactionModel>()
-
-        // Add headers and transactions
-        if (todayTransactions.isNotEmpty()) {
-            categorizedTransactions.add(TransactionModel(header = "Today"))
-            categorizedTransactions.addAll(todayTransactions)
-        }
-        if (yesterdayTransactions.isNotEmpty()) {
-            categorizedTransactions.add(TransactionModel(header = "Yesterday"))
-            categorizedTransactions.addAll(yesterdayTransactions)
-        }
-        if (lastWeekTransactions.isNotEmpty()) {
-            categorizedTransactions.add(TransactionModel(header = "Last Week"))
-            categorizedTransactions.addAll(lastWeekTransactions)
-        }
-        if (lastThreeWeeksTransactions.isNotEmpty()) {
-            categorizedTransactions.add(TransactionModel(header = "Last 3 Weeks"))
-            categorizedTransactions.addAll(lastThreeWeeksTransactions)
-        }
-        Log.e("TestDATA","""
-            ToDay: $todayTransactions
-            yesterday: $yesterdayTransactions
-        """.trimIndent())
-
-        // Set the filtered data
+        // Update the list and notify
         transactionModels = categorizedTransactions
         notifyDataSetChanged()
+
     }
 
 }

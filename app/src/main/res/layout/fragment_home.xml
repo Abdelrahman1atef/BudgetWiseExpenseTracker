@@ -208,7 +208,7 @@
 
             <include
                 android:id="@+id/fragment_monthly_spending_summary"
-                layout="@layout/fragment_monthly_spending_summary" />
+                layout="@layout/fragment_spend_freq_recent_transactions" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
