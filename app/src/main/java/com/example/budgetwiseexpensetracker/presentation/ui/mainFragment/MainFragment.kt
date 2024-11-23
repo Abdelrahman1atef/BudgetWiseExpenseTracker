@@ -56,22 +56,14 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.bottomNavigationMainPage.menu.getItem(2).isEnabled = false
-        binding.bottomAppBar.setPadding(0,0,0,0)
-        binding.bottomNavigationMainPage.setPadding(0,0,0,0)
-        // Handle window insets to avoid bottom padding
-        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomAppBar) { v, insets ->
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.coordinatorLayout) { v, insets ->
             val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Adjust padding based on system bars insets
             v.setPadding(0, 0, 0, systemBarsInsets.bottom)
             insets // Return the insets to be passed on to the next listener
         }
 
-        // Optionally, you can apply the same for bottomNavigationMainPage
-        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavigationMainPage) { v, insets ->
-            val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(0, 0, 0, systemBarsInsets.bottom)
-            insets // Return the insets to be passed on
-        }
         initView()
     }
 

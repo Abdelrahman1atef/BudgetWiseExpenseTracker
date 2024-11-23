@@ -6,36 +6,43 @@
     </style>
 
     <style name="Theme.BudgetWiseExpenseTracker" parent="Base.Theme.BudgetWiseExpenseTracker" />
-    <style name="monthTextStyle" >
+
+    <style name="monthTextStyle">
         <item name="android:textColor">#212325</item>
         <item name="android:textSize">@dimen/_10sdp</item>
         <item name="fontFamily">@font/arial</item>
     </style>
+
     <style name="accountBalanceTextStyle">
         <item name="android:textColor">#91919F</item>
         <item name="android:textSize">@dimen/_10sdp</item>
         <item name="fontFamily">@font/arial</item>
     </style>
+
     <style name="balanceTextStyle">
         <item name="android:textColor">#161719</item>
         <item name="android:textSize">@dimen/_45sdp</item>
         <item name="fontFamily">@font/arial_mdm</item>
     </style>
+
     <style name="titleIncomeExpenseTextStyle">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">@dimen/_10sdp</item>
         <item name="fontFamily">@font/arial</item>
     </style>
+
     <style name="subtitleTextStyle">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">@dimen/_18sdp</item>
         <item name="fontFamily">@font/arial_mdm</item>
     </style>
+
     <style name="titleTextStyle">
         <item name="android:textColor">#0D0E0F</item>
         <item name="android:textSize">@dimen/_15sdp</item>
         <item name="fontFamily">@font/arial_bold</item>
     </style>
+
     <style name="seeMoreStyle">
         <item name="android:textColor">@color/primary</item>
         <item name="android:textSize">@dimen/_12sdp</item>
@@ -43,20 +50,28 @@
         <item name="fontFamily">@font/arial_mdm</item>
         <item name="textAllCaps">false</item>
     </style>
+
     <style name="catTitleTextStyle">
         <item name="android:textColor">#292B2D</item>
         <item name="android:textSize">@dimen/_12sdp</item>
         <item name="fontFamily">@font/arial_mdm</item>
     </style>
+
     <style name="catMoneyUsedTS">
         <item name="android:textColor">#FD3C4A</item>
         <item name="android:textSize">@dimen/_12sdp</item>
         <item name="fontFamily">@font/arial_mdm</item>
     </style>
+
     <style name="catSubtitleTextStyle">
         <item name="android:textColor">#91919F</item>
         <item name="android:textSize">@dimen/_10sdp</item>
         <item name="fontFamily">@font/arial_mdm</item>
+    </style>
+
+    <style name="ThemeOverlay.BudgetWiseExpenseTracker.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 
 </resources>

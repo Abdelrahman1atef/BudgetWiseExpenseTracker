@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:paddingHorizontal="@dimen/_37sdp"
+    android:paddingHorizontal="@dimen/_35sdp"
     android:paddingVertical="@dimen/_9sdp"
     android:fontFamily="@font/arial_mdm"
     android:text="Expense"

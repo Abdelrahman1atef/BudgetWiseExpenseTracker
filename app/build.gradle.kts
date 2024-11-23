@@ -79,5 +79,8 @@ dependencies {
     implementation (libs.androidx.room.ktx)
     //Koin
     implementation(libs.koin.android)
+    //circle image
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
 }
 

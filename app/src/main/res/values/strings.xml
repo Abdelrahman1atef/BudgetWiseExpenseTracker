@@ -12,4 +12,6 @@
     <string name="expense_list">Expense List</string>
     <string name="monthly_spending">Monthly Spending</string>
     <string name="profile">Profile</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
