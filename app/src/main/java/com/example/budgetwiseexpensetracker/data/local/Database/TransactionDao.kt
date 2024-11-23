@@ -16,7 +16,10 @@ interface TransactionDao {
         transaction: Transaction
     )
 
-    @Query("SELECT * FROM `transaction`")
+    @Query("""
+        SELECT * FROM `transaction`
+        ORDER BY transactionDateY DESC, transactionDateM DESC, transactionDateD DESC, currentTime DESC
+    """)
     fun getAllTransactions(): Flow<MutableList<Transaction>>
 
     @Query(
@@ -31,6 +34,22 @@ interface TransactionDao {
 """
     )
     fun getRecentTransactions(): Flow<MutableList<Transaction>>
+    @Query(
+        """
+    SELECT id, title, subtitle, icon, SUM(amount) AS amount, MAX(currentTime) AS currentTime,
+            transactionDateD,transactionDateM,transactionDateY,itemColor, type 
+    FROM `transaction`
+    where type='Income'
+    GROUP BY title""")
+    fun getAllIncomeTransactions(): Flow<MutableList<Transaction>>
+    @Query(
+        """
+    SELECT id, title, subtitle, icon, SUM(amount) AS amount, MAX(currentTime) AS currentTime,
+            transactionDateD,transactionDateM,transactionDateY,itemColor, type 
+    FROM `transaction`
+    where type='Expense'
+    GROUP BY title""")
+    fun getAllExpenseTransactions(): Flow<MutableList<Transaction>>
 
     @Query("""
         SELECT SUM(

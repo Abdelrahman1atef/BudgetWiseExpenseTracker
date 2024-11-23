@@ -9,14 +9,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budgetwiseexpensetracker.databinding.FragmentExpenseListBinding
 import com.example.budgetwiseexpensetracker.presentation.adapter.ExListRecyclerAdapter
-import com.example.budgetwiseexpensetracker.presentation.adapter.HomeRecyclerAdapter
 import com.example.budgetwiseexpensetracker.utils.DateUtils
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ExpenseListFragment : Fragment() {
     private lateinit var binding: FragmentExpenseListBinding
-    private lateinit var ExListRecyclerAdapter: ExListRecyclerAdapter
+    private lateinit var exListRecyclerAdapter: ExListRecyclerAdapter
     private val viewModel by viewModel<ExpenseListViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,13 +32,10 @@ class ExpenseListFragment : Fragment() {
         initView()
     }
 
-
-
     private fun initView() {
         setViewModel()
         setObserver()
         setView()
-
     }
 
     private fun setView() {
@@ -56,14 +52,15 @@ class ExpenseListFragment : Fragment() {
                 (binding.rvTransaction.adapter as? ExListRecyclerAdapter)?.setData(
                     trasaction
                 )
+            }
         }
     }
-}
+
     private fun setAdapter() {
-        ExListRecyclerAdapter = ExListRecyclerAdapter()
+        exListRecyclerAdapter = ExListRecyclerAdapter()
         binding.rvTransaction.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = ExListRecyclerAdapter
+            adapter = exListRecyclerAdapter
         }
     }
 }

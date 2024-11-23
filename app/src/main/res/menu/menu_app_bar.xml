@@ -20,7 +20,7 @@
 
         />
     <item
-        android:id="@+id/monthly_spending"
+        android:id="@+id/monthlySpendingSummaryFragment"
         android:icon="@drawable/pie_chart"
         android:title="@string/monthly_spending"
         app:showAsAction="ifRoom" />

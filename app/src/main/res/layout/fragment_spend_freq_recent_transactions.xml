@@ -42,16 +42,16 @@
         app:layout_constraintTop_toBottomOf="@+id/piechart" />
 
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/appCompatButton"
-        style="@style/seeMoreStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_12sdp"
-        android:minHeight="@dimen/_23sdp"
-        android:text="See All"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/piechart" />
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/appCompatButton"-->
+<!--        style="@style/seeMoreStyle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="@dimen/_12sdp"-->
+<!--        android:minHeight="@dimen/_23sdp"-->
+<!--        android:text="See All"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/piechart" />-->
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -59,10 +59,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_13sdp"
+        android:layout_marginTop="@dimen/_9sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatButton"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:listitem="@layout/monthly_spending_item" />
 
 

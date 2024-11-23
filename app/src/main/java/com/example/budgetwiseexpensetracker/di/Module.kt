@@ -6,6 +6,8 @@ import com.example.budgetwiseexpensetracker.data.local.Database.local_repository
 import com.example.budgetwiseexpensetracker.domain.repository.Repository
 import com.example.budgetwiseexpensetracker.domain.repository.RepositoryImp
 import com.example.budgetwiseexpensetracker.domain.usecase.GetAllTransactionsUseCase
+import com.example.budgetwiseexpensetracker.domain.usecase.GetExpenseTransactionUseCase
+import com.example.budgetwiseexpensetracker.domain.usecase.GetIncomeTransactionUseCase
 import com.example.budgetwiseexpensetracker.domain.usecase.GetRecentTransactionUseCase
 import com.example.budgetwiseexpensetracker.domain.usecase.GetTotalBalanceUseCase
 import com.example.budgetwiseexpensetracker.domain.usecase.GetTotalExpenseUseCase
@@ -15,6 +17,7 @@ import com.example.budgetwiseexpensetracker.presentation.ui.expense.ExpenseViewM
 import com.example.budgetwiseexpensetracker.presentation.ui.expenseList.ExpenseListViewModel
 import com.example.budgetwiseexpensetracker.presentation.ui.home.HomeViewModel
 import com.example.budgetwiseexpensetracker.presentation.ui.income.IncomeViewModel
+import com.example.budgetwiseexpensetracker.presentation.ui.monthly_spending_summary.MonthlySpendingSummaryViewModel
 import com.example.myroomdatabase.Database.TransactionDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
@@ -25,6 +28,7 @@ val viewModelModule = module {
     viewModel{ExpenseViewModel(get())}
     viewModel{ IncomeViewModel(get()) }
     viewModel { ExpenseListViewModel(get()) }
+    viewModel { MonthlySpendingSummaryViewModel(get(),get()) }
 }
 val useCaseModule = module {
     factory { GetAllTransactionsUseCase(get()) }
@@ -33,6 +37,8 @@ val useCaseModule = module {
     factory { GetTotalBalanceUseCase(get()) }
     factory { GetTotalExpenseUseCase(get()) }
     factory { GetTotalIncomeUseCase(get()) }
+    factory { GetIncomeTransactionUseCase(get()) }
+    factory { GetExpenseTransactionUseCase(get()) }
 }
 
 val repositoryModule = module {

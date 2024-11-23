@@ -15,4 +15,9 @@
         android:name="com.example.budgetwiseexpensetracker.presentation.ui.expenseList.ExpenseListFragment"
         android:label="fragment_expense_list"
         tools:layout="@layout/fragment_expense_list" />
+    <fragment
+        android:id="@+id/monthlySpendingSummaryFragment"
+        android:name="com.example.budgetwiseexpensetracker.presentation.ui.monthly_spending_summary.MonthlySpendingSummaryFragment"
+        android:label="fragment_monthly_spending_summary"
+        tools:layout="@layout/fragment_monthly_spending_summary" />
 </navigation>

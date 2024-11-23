@@ -1,5 +1,7 @@
 package com.example.budgetwiseexpensetracker.presentation.adapter
 
+import android.text.SpannableStringBuilder
+import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,11 +10,9 @@ import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.MonthlySpendingItemBinding
 import com.example.budgetwiseexpensetracker.databinding.SectionHeaderBinding
-import com.example.budgetwiseexpensetracker.utils.isLastWeek
-import com.example.budgetwiseexpensetracker.utils.isRestOfMonth
-import com.example.budgetwiseexpensetracker.utils.isThisWeek
-import com.example.budgetwiseexpensetracker.utils.isToday
-import com.example.budgetwiseexpensetracker.utils.isYesterday
+import com.example.budgetwiseexpensetracker.utils.getTransactionDate
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ExListRecyclerAdapter : RecyclerView.Adapter<ViewHolder>() {
     private var transactionModels: MutableList<TransactionModel> =
@@ -39,29 +39,28 @@ class ExListRecyclerAdapter : RecyclerView.Adapter<ViewHolder>() {
                     binding.tvAmount.text = "- $${transactionModel.amount.toString()}"
                 }
             }
-
         }
     }
 
     inner class HeaderViewHolder(val binding: SectionHeaderBinding) : ViewHolder(binding.root) {
         fun onBind(headerText: String) {
-            binding.tvSectionHeader.text = headerText
+            val formattedText = formatHeaderText(headerText)
+            binding.tvSectionHeader.text = formattedText
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
             TYPE_HEADER -> {
-                val binding =
-                    SectionHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = SectionHeaderBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
                 HeaderViewHolder(binding)
             }
 
             TYPE_TRANSACTION -> {
                 val binding = MonthlySpendingItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
                 TransactionViewHolder(binding)
             }
@@ -77,7 +76,7 @@ class ExListRecyclerAdapter : RecyclerView.Adapter<ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is TransactionViewHolder -> holder.onBind(transactionModels[position])
-            is HeaderViewHolder -> transactionModels[position].header?.let { holder.onBind(it) } // Use any property you want to show in header
+            is HeaderViewHolder -> transactionModels[position].header?.let { holder.onBind(it) }
         }
     }
 
@@ -88,28 +87,42 @@ class ExListRecyclerAdapter : RecyclerView.Adapter<ViewHolder>() {
     fun setData(newData: MutableList<TransactionModel>) {
         val categorizedTransactions = mutableListOf<TransactionModel>()
 
-        // Group transactions by category
-        val categories = mapOf(
-            "Today" to newData.filter { isToday(it) },
-            "Yesterday" to newData.filter { isYesterday(it) },
-            "This Week" to newData.filter { isThisWeek(it) },
-            "Last Week" to newData.filter { isLastWeek(it) },
-            "Rest of Month" to newData.filter { isRestOfMonth(it) }
-        )
+        // Group transactions by day
+        val groupedByDate = newData.groupBy {
+            SimpleDateFormat("EEEE\ndd/MM/yyyy", Locale.getDefault()).format(getTransactionDate(it).time)
+        }
 
         // Add headers and their corresponding transactions
-        for ((header, transactions) in categories) {
-            if (transactions.isNotEmpty()) {
-                categorizedTransactions.add(TransactionModel(header = header))
-                categorizedTransactions.addAll(transactions)
-            }
+        for ((date, transactions) in groupedByDate) {
+            categorizedTransactions.add(TransactionModel(header = date)) // Add header with date
+            categorizedTransactions.addAll(transactions) // Add transactions under this date
         }
 
         // Update the list and notify
         transactionModels = categorizedTransactions
         notifyDataSetChanged()
-
     }
 
+    fun formatHeaderText(fullDate: String): SpannableStringBuilder {
+        val parts = fullDate.split("\n")
+        val dayName = parts[0]  // EEEE
+        val date = parts[1]     // dd/MM/yyyy
+
+        val spannableBuilder = SpannableStringBuilder()
+
+        // Append day name with default size
+        spannableBuilder.append(dayName)
+
+        // Append date with smaller size
+        spannableBuilder.append("\n")
+        val start = spannableBuilder.length
+        spannableBuilder.append(date)
+        val end = spannableBuilder.length
+
+        spannableBuilder.setSpan(RelativeSizeSpan(0.6f), start, end, 0) // Set date to 70% of original size
+
+        return spannableBuilder
+    }
 }
+
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tab_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingHorizontal="@dimen/_37sdp"
+    android:paddingVertical="@dimen/_9sdp"
+    android:fontFamily="@font/arial_mdm"
+    android:text="Expense"
+    android:textColor="@color/tab_text_selector"
+    android:textSize="@dimen/_14sdp" />

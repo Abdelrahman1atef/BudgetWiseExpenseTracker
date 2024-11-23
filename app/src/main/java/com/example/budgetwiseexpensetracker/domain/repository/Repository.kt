@@ -11,6 +11,8 @@ interface Repository {
     suspend fun getTotalIncome(): Flow<Double>
     suspend fun getTotalExpense(): Flow<Double>
     suspend fun getAllTransactions(): Flow<MutableList<TransactionModel>>
+    suspend fun getIncomeTransaction(): Flow<MutableList<TransactionModel>>
+    suspend fun getExpenseTransaction(): Flow<MutableList<TransactionModel>>
 
 
 }

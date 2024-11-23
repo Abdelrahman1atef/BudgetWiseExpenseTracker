@@ -29,10 +29,15 @@ object DateUtils {
 fun getTransactionDate(transaction: TransactionModel): Calendar {
     return Calendar.getInstance().apply {
         transaction.transactionDateY?.let { set(Calendar.YEAR, it) }
-        transaction.transactionDateM?.minus(1)?.let { set(Calendar.MONTH, it) } // Adjust for zero-based month
+        transaction.transactionDateM?.minus(1)?.let { set(Calendar.MONTH, it) } // Zero-based month
         transaction.transactionDateD?.let { set(Calendar.DAY_OF_MONTH, it) }
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
     }
 }
+
 
 fun isToday(transaction: TransactionModel): Boolean {
     val today = Calendar.getInstance()
@@ -101,61 +106,5 @@ fun isRestOfMonth(transaction: TransactionModel): Boolean {
     // Ensure the transaction is after yesterday and within the rest of the month
     return transactionDate.after(today) && transactionDate.before(endOfMonth.time)
 }
-//
-//fun isToday(transaction: TransactionModel): Boolean {
-//    val today = Calendar.getInstance()
-//    return getTransactionDate(transaction).apply { set(Calendar.HOUR_OF_DAY, 0) }.timeInMillis ==
-//            today.apply { set(Calendar.HOUR_OF_DAY, 0) }.timeInMillis
-//}
-//
-//
-//fun isYesterday(transaction: TransactionModel): Boolean {
-//    val yesterday = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
-//    return getTransactionDate(transaction).apply { set(Calendar.HOUR_OF_DAY, 0) }.timeInMillis ==
-//            yesterday.apply { set(Calendar.HOUR_OF_DAY, 0) }.timeInMillis
-//}
-//fun isThisWeek(transaction: TransactionModel):Boolean{
-//    val transactionDate = getTransactionDate(transaction)
-//    val startOfThisWeek = Calendar.getInstance().apply {
-//        add(Calendar.WEEK_OF_YEAR, -1)
-//        set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
-//    }
-//    val endOfThisWeek = Calendar.getInstance().apply {
-//        set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
-//        add(Calendar.DAY_OF_YEAR, 6)
-//
-//    }
-//    return transactionDate.timeInMillis in startOfThisWeek.timeInMillis..endOfThisWeek.timeInMillis
-//}
-//
-//fun isLastWeek(transaction: TransactionModel): Boolean {
-//    val transactionDate = getTransactionDate(transaction)
-//    val startOfLastWeek = Calendar.getInstance().apply {
-//        add(Calendar.WEEK_OF_YEAR, -1)
-//        set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
-//    }
-//    val endOfLastWeek = Calendar.getInstance().apply {
-//        add(Calendar.WEEK_OF_YEAR, -1)
-//        set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
-//        add(Calendar.DAY_OF_YEAR, 6)
-//    }
-//
-//    return transactionDate.timeInMillis in startOfLastWeek.timeInMillis..endOfLastWeek.timeInMillis
-//}
-//
-//fun isLastThreeWeeks(transaction: TransactionModel): Boolean {
-//    val transactionDate = getTransactionDate(transaction)
-//    val now = Calendar.getInstance()
-//    val startOfLastWeek = Calendar.getInstance().apply {
-//        add(Calendar.WEEK_OF_YEAR, -1)
-//        set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
-//    }
-//    val threeWeeksAgo = Calendar.getInstance().apply {
-//        add(Calendar.WEEK_OF_YEAR, -3)
-//        set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
-//    }
-//
-//    // Ensure the transaction falls within the last three weeks but not in the last week
-//    return transactionDate.timeInMillis in threeWeeksAgo.timeInMillis until startOfLastWeek.timeInMillis
-//}
+
 
