@@ -1,9 +1,9 @@
-package com.example.budgetwiseexpensetracker.data.local.Database.local_repository
+package com.example.budgetwiseexpensetracker.data.local.local_repository
 
-import com.example.budgetwiseexpensetracker.data.local.Database.interfaces.TransactionDS
+import com.example.budgetwiseexpensetracker.data.local.database.daos.TransactionDao
+import com.example.budgetwiseexpensetracker.data.local.interfaces.TransactionDS
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
-import com.example.myroomdatabase.Database.Transaction
-import com.example.myroomdatabase.Database.TransactionDao
+import com.example.budgetwiseexpensetracker.data.local.database.entities.TransactionEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.map
 
 class TransactionDSImpel(private val dao: TransactionDao) : TransactionDS {
     override suspend fun upsertTransaction(transaction: TransactionModel) {
-        val entity: Transaction? = transaction.title?.let {
-            Transaction(
+        val entity: TransactionEntity? = transaction.title?.let {
+            TransactionEntity(
                 title = it,
                 subtitle = transaction.subtitle,
                 icon = transaction.icon,

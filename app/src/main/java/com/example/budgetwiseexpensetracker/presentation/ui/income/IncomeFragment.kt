@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.budgetwiseexpensetracker.R
@@ -104,6 +105,24 @@ class IncomeFragment : Fragment() {
     private fun setBackArrowClick() {
         var isMessageShown = false // Flag to track if message is shown
         binding.backArrow.setOnClickListener {
+            if (!isMessageShown) {
+                // Show the message
+                if (binding.etAmount.text.toString() == "0") {
+                    Toast.makeText(
+                        requireContext(),
+                        "Click the back arrow again to confirm",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    isMessageShown = true // Set flag to true after showing the message
+                } else {
+                    findNavController().navigateUp() // Close activity if amount is 0
+                }
+            } else {
+                // Close activity if message has already been shown
+                findNavController().navigateUp()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
             if (!isMessageShown) {
                 // Show the message
                 if (binding.etAmount.text.toString() == "0") {

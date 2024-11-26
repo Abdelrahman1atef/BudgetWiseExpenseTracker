@@ -1,5 +1,6 @@
 package com.example.budgetwiseexpensetracker.domain.repository
 
+import com.example.budgetwiseexpensetracker.data.local.database.entities.PersonalInfoEntity
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import kotlinx.coroutines.flow.Flow
 
@@ -13,6 +14,10 @@ interface Repository {
     suspend fun getAllTransactions(): Flow<MutableList<TransactionModel>>
     suspend fun getIncomeTransaction(): Flow<MutableList<TransactionModel>>
     suspend fun getExpenseTransaction(): Flow<MutableList<TransactionModel>>
+
+    suspend fun getPersonalInfo(): Flow<PersonalInfoEntity>
+    suspend fun insertOrUpdatePersonalInfo(personalInfo: PersonalInfoEntity)
+    suspend fun deletePersonalInfo(personalInfo: PersonalInfoEntity)
 
 
 }

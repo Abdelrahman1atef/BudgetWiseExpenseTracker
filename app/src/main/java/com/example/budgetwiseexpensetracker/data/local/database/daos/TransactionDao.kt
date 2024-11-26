@@ -1,26 +1,27 @@
-package com.example.myroomdatabase.Database
+package com.example.budgetwiseexpensetracker.data.local.database.daos
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
+import com.example.budgetwiseexpensetracker.data.local.database.entities.TransactionEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TransactionDao {
     @Upsert
-    suspend fun upsertAll(transactions: Transaction)
+    suspend fun upsertAll(transactions: TransactionEntity)
 
     @Delete
     suspend fun deleteTransactions(
-        transaction: Transaction
+        transactionEntity: TransactionEntity
     )
 
     @Query("""
         SELECT * FROM `transaction`
         ORDER BY transactionDateY DESC, transactionDateM DESC, transactionDateD DESC, currentTime DESC
     """)
-    fun getAllTransactions(): Flow<MutableList<Transaction>>
+    fun getAllTransactions(): Flow<MutableList<TransactionEntity>>
 
     @Query(
         """
@@ -33,7 +34,7 @@ interface TransactionDao {
     SELECT * FROM `transaction` WHERE title NOT IN (SELECT DISTINCT title FROM `transaction`)
 """
     )
-    fun getRecentTransactions(): Flow<MutableList<Transaction>>
+    fun getRecentTransactions(): Flow<MutableList<TransactionEntity>>
     @Query(
         """
     SELECT id, title, subtitle, icon, SUM(amount) AS amount, MAX(currentTime) AS currentTime,
@@ -41,7 +42,7 @@ interface TransactionDao {
     FROM `transaction`
     where type='Income'
     GROUP BY title""")
-    fun getAllIncomeTransactions(): Flow<MutableList<Transaction>>
+    fun getAllIncomeTransactions(): Flow<MutableList<TransactionEntity>>
     @Query(
         """
     SELECT id, title, subtitle, icon, SUM(amount) AS amount, MAX(currentTime) AS currentTime,
@@ -49,7 +50,7 @@ interface TransactionDao {
     FROM `transaction`
     where type='Expense'
     GROUP BY title""")
-    fun getAllExpenseTransactions(): Flow<MutableList<Transaction>>
+    fun getAllExpenseTransactions(): Flow<MutableList<TransactionEntity>>
 
     @Query("""
         SELECT SUM(
@@ -70,16 +71,16 @@ interface TransactionDao {
     fun getTotalIncome(): Flow<Double>
 
     @Query("SELECT * FROM `transaction` ORDER BY amount DESC")
-    fun getTransactionByHighAmount(): Flow<MutableList<Transaction>>
+    fun getTransactionByHighAmount(): Flow<MutableList<TransactionEntity>>
 
     @Query("SELECT * FROM `transaction` ORDER BY amount ASC")
-    fun getTransactionByLowAmount(): Flow<MutableList<Transaction>>
+    fun getTransactionByLowAmount(): Flow<MutableList<TransactionEntity>>
 
     @Query("SELECT * FROM `transaction` ORDER BY currentTime DESC")
-    fun getTransactionByNewestTime(): Flow<MutableList<Transaction>>
+    fun getTransactionByNewestTime(): Flow<MutableList<TransactionEntity>>
 
     @Query("SELECT * FROM `transaction` ORDER BY currentTime ASC")
-    fun getTransactionByOldestTime(): Flow<MutableList<Transaction>>
+    fun getTransactionByOldestTime(): Flow<MutableList<TransactionEntity>>
 
 //    @Query("""
 //        INSERT INTO "transaction"VALUES(15, 'Shopping', '', 2131230978, 100.0, '01:55 AM', 18, 11, 2024, 2131099652, 'Expense');

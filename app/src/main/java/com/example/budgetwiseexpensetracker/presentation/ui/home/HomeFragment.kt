@@ -10,9 +10,14 @@ import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
+import com.example.budgetwiseexpensetracker.R
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import com.example.budgetwiseexpensetracker.databinding.FragmentHomeBinding
 import com.example.budgetwiseexpensetracker.presentation.adapter.HomeRecyclerAdapter
+import com.example.budgetwiseexpensetracker.presentation.ui.profile.ProfileViewModel
 import com.example.budgetwiseexpensetracker.utils.DateUtils
 import kotlinx.coroutines.launch
 import org.eazegraph.lib.models.PieModel
@@ -20,9 +25,9 @@ import java.util.Calendar
 
 class HomeFragment : Fragment() {
     private val viewModel by viewModel<HomeViewModel>()
+    private val personalInfoViewModel by viewModel<ProfileViewModel>()
     private lateinit var binding: FragmentHomeBinding
     private lateinit var homeRecyclerAdapter: HomeRecyclerAdapter
-//    private val now: Calendar = Calendar.getInstance()
 
 
     override fun onCreateView(
@@ -53,6 +58,7 @@ class HomeFragment : Fragment() {
         viewModel.getTotalBalance()
         viewModel.getTotalExpense()
         viewModel.getTotalIncome()
+        personalInfoViewModel.getPersonalInfo()
     }
 
     private fun setObserver() {
@@ -81,7 +87,20 @@ class HomeFragment : Fragment() {
                 binding.tvIncomeTotal.text = "$${totalIncome}"
             }
         }
-
+        lifecycleScope.launch {
+            personalInfoViewModel.showPersonalInfo.collect { personalInfo ->
+                // Safely handle profile image
+                personalInfo.imagePath?.let { imageBytes ->
+                    Glide.with(requireContext())
+                        .load(imageBytes)
+                        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                        .into(binding.profileImage)
+                } ?: run {
+                    // Fallback if imagePath is null
+                    binding.profileImage.setImageResource(R.drawable.user) // Replace with your default image
+                }
+            }
+        }
     }
 
     private fun updatePieChart(spendingData: MutableList<TransactionModel>) {

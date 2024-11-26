@@ -1,4 +1,4 @@
-package com.example.budgetwiseexpensetracker.data.local.Database.interfaces
+package com.example.budgetwiseexpensetracker.data.local.interfaces
 
 import com.example.budgetwiseexpensetracker.data.model.TransactionModel
 import kotlinx.coroutines.flow.Flow
