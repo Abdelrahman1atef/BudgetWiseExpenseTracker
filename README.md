@@ -54,9 +54,12 @@ Click **Run ▶** to build and deploy the app.
 
 ## 📷 Screenshots
 
-| Dashboard | Add Transaction | Spending Chart |
+| Dashboard | Add Transaction | Income Chart |
 |-----------|------------------|----------------|
 | ![Dashboard](screenshots/Dashboard.jpg) | ![Add](screenshots/Add.jpg) | ![Chart](screenshots/ChartIN.jpg) |
+| Spend Chart | Spend Transaction |
+|-----------|------------------|----------------|
+| ![Spend Chart](screenshots/chartex.jpg) | ![Spend Transaction](screenshots/ex.jpg) |
 
 ---
 
