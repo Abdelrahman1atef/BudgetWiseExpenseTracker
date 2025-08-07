@@ -59,7 +59,7 @@ Click **Run ▶** to build and deploy the app.
 | ![Dashboard](screenshots/Dashboard.jpg) | ![Add](screenshots/Add.jpg) | ![Chart](screenshots/ChartIN.jpg) |
 | Spend Chart | Spend Transaction |
 |-----------|------------------|----------------|
-| ![Spend Chart](screenshots/chartex.jpg) | ![Spend Transaction](screenshots/ex.jpg) |
+| ![Spend Chart](screenshots/ChartEX.jpg) | ![Spend Transaction](screenshots/ex.jpg) |
 
 ---
 
