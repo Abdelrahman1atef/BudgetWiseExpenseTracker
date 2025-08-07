@@ -56,7 +56,7 @@ Click **Run ▶** to build and deploy the app.
 
 | Dashboard | Add Transaction | Spending Chart |
 |-----------|------------------|----------------|
-| ![Dashboard](./assets/dashboard.png) | ![Add](./assets/add_transaction.png) | ![Chart](./assets/pie_chart.png) |
+| ![Dashboard](screenshots/dashboard.png) | ![Add](screenshots/add_transaction.png) | ![Chart](screenshots/pie_chart.png) |
 
 ---
 
