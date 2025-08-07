@@ -50,17 +50,16 @@ Android Studio **Dolphin or newer** is recommended.
 Connect a device or start an emulator.  
 Click **Run ▶** to build and deploy the app.
 
----## 📷 Screenshots
+## 📷 Screenshots
 
 | 🏠 Dashboard | ➕ Add Transaction | 📈 Income Chart |
-|-------------|-------------------|------------------|
-| ![Dashboard](screenshots/dashboard.jpg) | ![Add Transaction](screenshots/add.jpg) | ![Income Chart](screenshots/chart in.jpg) |
+|-------------|-------------------|-----------------|
+| ![Dashboard](screenshots/dashboard.jpg) | ![Add Transaction](screenshots/add.jpg) | ![Income Chart](screenshots/chart_in.jpg) |
 
 | 📉 Spending Chart | 💸 Spending Transaction |
 |------------------|------------------------|
-| ![Spending Chart](screenshots/chart ex.jpg) | ![Spending Transaction](screenshots/ex.jpg) |
+| ![Spending Chart](screenshots/chart_ex.jpg) | ![Spending Transaction](screenshots/ex.jpg) |
 
----
 
 ## 🎯 Why I Built This
 
